@@ -24,13 +24,13 @@ public class beanEventos {
 	String[] longitud;
 	String[] distancia;
 	String[] url;
-	String[] id;
-	
-	public String[] getId() {
-		return id;
+	String[] id_marker;
+
+	public String[] getId_marker() {
+		return id_marker;
 	}
-	public void setId(String[] id) {
-		this.id = id;
+	public void setId_marker(String[] id_marker) {
+		this.id_marker = id_marker;
 	}
 	public String[] getNombre() {
 		return nombre;

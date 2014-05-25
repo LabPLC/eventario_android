@@ -93,7 +93,6 @@ public class Utils {
 					
 				  for (int i = 0; i < jsonarray.length(); i++) {
 					  	JSONObject oneObject = jsonarray.getJSONObject(i);
-					  		id[i]=(i+"");
 							nombre[i]=((String) oneObject.getString("nombre"));
 							lugar[i]=((String) oneObject.getString("lugar"));
 							hora_inicio[i]=((String) oneObject.getString("hora_inicio"));
@@ -115,7 +114,6 @@ public class Utils {
 		
 				      }
 				  
-				  	bean.setId(id);
 					bean.setNombre(nombre);
 					bean.setLugar(lugar);
 					bean.setHora_inicio(hora_inicio);

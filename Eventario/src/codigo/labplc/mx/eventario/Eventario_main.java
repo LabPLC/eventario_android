@@ -54,7 +54,8 @@ public class Eventario_main extends Activity {
 	private beanEventos bean;
 	private String radio="2";
 	private String progreso;
-	private int id_evento=-1;
+	private String id_ubicacion;
+	private String[] id_markers;
 	
 	
 	
@@ -145,9 +146,9 @@ public class Eventario_main extends Activity {
 			            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 			            	
 			               	Intent intent = new Intent(Eventario_main.this,Detalle_evento_Activity.class);
-			            	intent.putExtra("id_evento", bean.getId()[position]);
+			            	intent.putExtra("id_evento", bean.getId_marker()[position]);
 			            	startActivity(intent);
-			               Toast.makeText(Eventario_main.this, "You Clicked at " +bean.getId()[position], Toast.LENGTH_SHORT).show();
+			               Toast.makeText(Eventario_main.this, "You Clicked at " +bean.getId_marker()[position], Toast.LENGTH_SHORT).show();
 			            }
 			        });
 			    
@@ -215,12 +216,12 @@ public class Eventario_main extends Activity {
 		marker.position(new LatLng(lat, lon));
 		marker.title(getResources().getString(R.string.mapa_inicio_de_viaje));
 		marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher_chinche_llena));
+		
 		CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(lat, lon)).zoom(21).build();
 		map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 		// adding marker
-		map.addMarker(marker);	
-	
-		
+		Marker m = map.addMarker(marker);	
+		id_ubicacion=m.getId();
 	}
 	
 	
@@ -270,9 +271,12 @@ public class Eventario_main extends Activity {
 				@Override
 				public void onInfoWindowClick(Marker marker) {
 
-			           
-				   	Intent intent = new Intent(Eventario_main.this,Detalle_evento_Activity.class);
-	            	startActivity(intent);
+					if(!marker.getId().toString().equals(id_ubicacion)){
+						Intent intent = new Intent(Eventario_main.this,Detalle_evento_Activity.class);
+						intent.putExtra("id_evento", marker.getId());
+						startActivity(intent);
+						//Toast.makeText(Eventario_main.this, "You Clicked at " +marker.getId(), Toast.LENGTH_SHORT).show();
+					}
 					
 				}
 			});
@@ -283,42 +287,43 @@ public class Eventario_main extends Activity {
 	            }           
 	            @Override
 	            public View getInfoContents(Marker marker) {
-	            	 try{
-	            	
-		            	View v = getLayoutInflater().inflate(R.layout.windowlayout, null);
-		                String s[] = marker.getTitle().split("@@");
-		                TextView   pupop_nombre = (TextView) v.findViewById(R.id.pupop_nombre);
-		                pupop_nombre.setText(s[0] );
-		                TextView pupop_lugar = (TextView) v.findViewById(R.id.pupop_lugar);
-		                pupop_lugar.setText(s[1]);
-		                return v;
-					}catch(Exception e){
-						 View v = getLayoutInflater().inflate(R.layout.windowlayout_simple, null);
+	            	if(!marker.getId().toString().equals(id_ubicacion)){
+			            	View v = getLayoutInflater().inflate(R.layout.windowlayout, null);
+			                String s[] = marker.getTitle().split("@@");
+			                TextView   pupop_nombre = (TextView) v.findViewById(R.id.pupop_nombre);
+			                pupop_nombre.setText(s[0] );
+			                TextView pupop_lugar = (TextView) v.findViewById(R.id.pupop_lugar);
+			                pupop_lugar.setText(s[1]);
+			                return v;
+		            	
+	            	}else{
+	            		View v = getLayoutInflater().inflate(R.layout.windowlayout_simple, null);
 						 TextView   pupop_nombre = (TextView) v.findViewById(R.id.pupop_simple_nombre);
 			              pupop_nombre.setText(getResources().getString(R.string.mapa_inicio_de_viaje));
-			              id_evento=-1;
 						 return v;
-					}
-	            	
+	            	}
+	            	 
 	                
 	              
 
 	            }
 	        });
 			marker.position(new LatLng(lat,lon));
-		   	map.addMarker(marker);
+			Marker m=map.addMarker(marker);
+			id_ubicacion=m.getId();
 		   	
 		   
+			id_markers = new String[bean.getLatitud().length];
+			
 			for(int i=0;i<bean.getLatitud().length;i++){
 				MarkerOptions markerte= new MarkerOptions();
 				markerte.position(new LatLng(Double.parseDouble(bean.getLatitud()[i]), Double.parseDouble(bean.getLongitud()[i])));
 				markerte.title(bean.getNombre()[i]+"@@"+bean.getLugar()[i]);
 				markerte.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher_pin));
-				map.addMarker(markerte);	
-				
+				Marker ma =map.addMarker(markerte);
+				id_markers[i] = ma.getId();
 			}
-		   	
-		 
+		   	bean.setId_marker(id_markers);
 		 	//
 		 	if(isLocalizado>=1){
 		 		if(pDialog!=null){
