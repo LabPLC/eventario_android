@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Eventario</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Mapa -->
+    <string name="mapa_titulo_drawer">Eventos cerca de ti</string>
+    <string name="mapa_inicio_de_viaje">Tu posición</string>
+    <string name="mapa_GPS_OFF">GPS apagado inseperado</string>
+    <string name="mapa_texto_significado_el_viaje_inicio">Espere, lo estamos localizando</string>
+    <string name="mapa_buscar">Buscar</string>
+    <string name="title_activity_configuracion_activity">Configuracion_activity</string>
+
+    <!-- Configuracion -->
+    <string name="configuracion_terminos">Terminos de uso</string>
+    <string name="configuracion_acercade">Acerca de</string>
+    <string name="configuracion_aceptar">Aceptar</string>
+    <string name="configuracion_titulo_distancia">Distancia de búsqueda:</string>
+    <string name="title_activity_detalle_evento_">Detalle_evento_Activity</string>
+    
+    <!-- Detalle evento -->
+    <string name="detalle_ab_titulo">Evento</string>
+</resources>
