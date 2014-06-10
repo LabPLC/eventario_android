@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.Color;
 import android.location.Criteria;
@@ -22,6 +23,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 import codigo.labplc.mx.eventario.R;
 import codigo.labplc.mx.eventario.utils.DirectionsJSONParser;
@@ -35,7 +41,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-public class Mapa_llegar_evento extends FragmentActivity  {
+public class Mapa_llegar_evento extends FragmentActivity implements OnClickListener {
 
 	GoogleMap map;
 
@@ -48,7 +54,19 @@ public class Mapa_llegar_evento extends FragmentActivity  {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_mapa_llegar_evento);
-		  // Initializing 
+		
+		
+		
+		 final ActionBar ab = getActionBar();
+	     ab.setDisplayShowHomeEnabled(false);
+	     ab.setDisplayShowTitleEnabled(false);     
+	     final LayoutInflater inflater = (LayoutInflater)getSystemService("layout_inflater");
+	     View view = inflater.inflate(R.layout.abs_layout,null);   
+	     ab.setDisplayShowCustomEnabled(true);
+	     ((ImageView) view.findViewById(R.id.abs_layout_iv_logo)).setOnClickListener(this);;
+	     ab.setCustomView(view,new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+	     ab.setCustomView(view);
+
         
     	Bundle bundle = getIntent().getExtras();
     	
@@ -359,7 +377,30 @@ public class Mapa_llegar_evento extends FragmentActivity  {
         }
     } 
     
-    
+    @Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.abs_layout_iv_logo) {
+	        	atras();
+			}
+
+	       
+	    }
+	
+	
+	
+	/**
+	 * sobreEscritura de onBack press
+	 */
+	public void atras(){
+		super.onBackPressed();
+	}
+	
+	
+	
+	 @Override
+	public void onBackPressed() {
+		 atras();
+	}
     
 }
 

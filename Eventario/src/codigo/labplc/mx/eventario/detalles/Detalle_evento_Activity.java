@@ -1,11 +1,25 @@
 package codigo.labplc.mx.eventario.detalles;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import net.londatiga.android.twitter.Twitter;
+import net.londatiga.android.twitter.TwitterRequest;
+import net.londatiga.android.twitter.TwitterUser;
+import net.londatiga.android.twitter.oauth.OauthAccessToken;
+import net.londatiga.android.twitter.util.Debug;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,6 +27,7 @@ import android.widget.Toast;
 import codigo.labplc.mx.eventario.R;
 import codigo.labplc.mx.eventario.detalles.mapa.Mapa_llegar_evento;
 import codigo.labplc.mx.eventario.dialogos.Dialogos;
+import codigo.labplc.mx.eventario.web.PaginaWebEvento;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,7 +38,10 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class Detalle_evento_Activity extends Activity {
+import android.os.Bundle;
+
+
+public class Detalle_evento_Activity extends BaseActivity implements OnClickListener{
 
 	private String nombre;
 	private String lugar;
@@ -33,7 +51,6 @@ public class Detalle_evento_Activity extends Activity {
 	private String descripcion;
 	private String precio;
 	private String direccion;
-	private String fuente;
 	private String fecha_inicio;
 	private String fecha_fin;
 	private String categoria;
@@ -41,14 +58,20 @@ public class Detalle_evento_Activity extends Activity {
 	private String pagina;
 	private String latitud;
 	private String longitud;
-	private String distancia;
 	private String url;
-	private String id_marker;
 	private Double mi_lat;
 	private Double mi_lon;
 	
 	private GoogleMap map;
 	private MarkerOptions marker;
+	
+	
+	private Twitter mTwitter;
+	
+	public static final String CONSUMER_KEY = "D4ABzYy7ZWF38WxNRQMrprbnn";
+	public static final String CONSUMER_SECRET = "jZoHRWIqi91kBqWlt6plc5em2TmccdqnH0kWNakiFynU2uvi03";
+	public static final String CALLBACK_URL = "http://eventario.mx";
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +82,10 @@ public class Detalle_evento_Activity extends Activity {
 		 final ActionBar ab = getActionBar();
 	     ab.setDisplayShowHomeEnabled(false);
 	     ab.setDisplayShowTitleEnabled(false);     
-
-	     //instancias
 	     final LayoutInflater inflater = (LayoutInflater)getSystemService("layout_inflater");
 	     View view = inflater.inflate(R.layout.abs_layout,null);   
-	     //instancias en  
 	     ab.setDisplayShowCustomEnabled(true);
-	     ImageView abs_layout_iv_menu = (ImageView) view.findViewById(R.id.abs_layout_iv_menu);
+	     ((ImageView) view.findViewById(R.id.abs_layout_iv_logo)).setOnClickListener(this);;
 	     ab.setCustomView(view,new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
 	     ab.setCustomView(view);
 	     
@@ -81,7 +101,6 @@ public class Detalle_evento_Activity extends Activity {
 				 this.descripcion =bundle.getString("descripcion");
 				 this.precio =bundle.getString("precio");
 				 this.direccion =bundle.getString("direccion");
-				 this.fuente =bundle.getString("fuente");
 				 this.fecha_inicio =bundle.getString("fecha_inicio");
 				 this.fecha_fin =bundle.getString("fecha_fin");
 				 this.categoria =bundle.getString("categoria");
@@ -89,9 +108,7 @@ public class Detalle_evento_Activity extends Activity {
 				 this.pagina =bundle.getString("pagina");
 				 this.latitud =bundle.getString("latitud") ;
 				 this.longitud =bundle.getString("longitud");
-				 this.distancia =bundle.getString("distancia"); 
 				 this.url =bundle.getString("url");
-				 this.id_marker =bundle.getString("id_marker");
 				 this.mi_lat =bundle.getDouble("mi_latitud");
 				 this.mi_lon =bundle.getDouble("mi_longitud");
 				 
@@ -107,7 +124,9 @@ public class Detalle_evento_Activity extends Activity {
 
 	}
 	
-	
+	/**
+	 * llena la vista con los valores recibidos
+	 */
 	public void llenarValores() {
         ImageView row_iv_evento =(ImageView)findViewById(R.id.detalle_evento_iv_evento);
         row_iv_evento.setImageDrawable(getResources().getDrawable(this.imagen));
@@ -140,7 +159,12 @@ public class Detalle_evento_Activity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				
+		        mTwitter = new Twitter(Detalle_evento_Activity.this, CONSUMER_KEY, CONSUMER_SECRET, CALLBACK_URL);
+				if (mTwitter.sessionActive()) {
+					updateStatus("visitare "+url +" #Eventario " + " usa #traxi");
+				} else {
+					signinTwitter();
+				}
 			}
 		});
         
@@ -184,11 +208,19 @@ public class Detalle_evento_Activity extends Activity {
 			@Override
 			public void onClick(View v) {
 				if(!pagina.equals("No disponible")){
-	
+					Intent intent = new Intent(Detalle_evento_Activity.this, PaginaWebEvento.class);
+					intent.putExtra("pagina", pagina);
+					startActivity(intent);
 				}
 			}
 		});
         
+        
+        
+        
+       
+		
+				
         
         
 
@@ -278,5 +310,107 @@ public class Detalle_evento_Activity extends Activity {
 		map.addMarker(marker);
 		map.addMarker(marker_);
 	}
+
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.abs_layout_iv_logo) {
+	        	atras();
+			}
+
+	       
+	    }
 	
+	/**
+	 * sobreEscritura de onBack press
+	 */
+	public void atras(){
+		super.onBackPressed();
+	}
+	
+	
+	
+	 @Override
+	public void onBackPressed() {
+		 atras();
+	}
+	 
+	 
+	 
+	 //Twitter
+	 private void signinTwitter() {
+			mTwitter.signin(new Twitter.SigninListener() {				
+				@Override
+				public void onSuccess(OauthAccessToken accessToken, String userId, String screenName) {
+					getCredentials();
+				}
+				
+				@Override
+				public void onError(String error) {
+				Log.d("*******", error);
+				}
+			});
+		}
+		
+		private void getCredentials() {
+			final ProgressDialog progressDlg = new ProgressDialog(this);
+			
+			progressDlg.setMessage("Getting credentials...");
+			progressDlg.setCancelable(false);
+			
+			progressDlg.show();
+			
+			TwitterRequest request = new TwitterRequest(mTwitter.getConsumer(), mTwitter.getAccessToken());
+			
+			request.verifyCredentials(new TwitterRequest.VerifyCredentialListener() {
+				
+				@Override
+				public void onSuccess(TwitterUser user) {
+					progressDlg.dismiss();
+					
+					Toast.makeText(getApplicationContext(),"Hola " + user.name,Toast.LENGTH_LONG).show();
+					
+					saveCredential(user.screenName, user.name, user.profileImageUrl);
+				}
+				
+				@Override
+				public void onError(String error) {
+					progressDlg.dismiss();
+					Log.d("*******", error);
+				}
+			});
+		}
+		
+		
+		private void updateStatus(String status) {
+			final ProgressDialog progressDlg = new ProgressDialog(this);
+			
+			progressDlg.setMessage("Enviando...");
+			progressDlg.setCancelable(false);
+			
+			progressDlg.show();
+			
+			TwitterRequest request 		= new TwitterRequest(mTwitter.getConsumer(), mTwitter.getAccessToken());
+			
+			String updateStatusUrl		= "https://api.twitter.com/1.1/statuses/update.json";
+			
+			List<NameValuePair> params 	= new ArrayList<NameValuePair>(1);
+			
+			params.add(new BasicNameValuePair("status", status));
+			
+			request.createRequest("POST", updateStatusUrl, params, new TwitterRequest.RequestListener() {
+				
+				@Override
+				public void onSuccess(String response) {
+					progressDlg.dismiss();
+					Toast.makeText(getApplicationContext(), "tuit enviado",Toast.LENGTH_LONG).show();
+				}
+				
+				@Override
+				public void onError(String error) {
+					Log.d("*******", error);
+					progressDlg.dismiss();
+				}
+			});
+		}
+	 
 }

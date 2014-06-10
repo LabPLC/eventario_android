@@ -29,5 +29,6 @@
     <string name="dialogo_gps_cancelar">Cancelar</string>
     <string name="dialogo_gps_aceptar">Aceptar</string>
     <string name="title_activity_mapa_llegar_evento">Mapa_llegar_evento</string>
+    <string name="title_activity_pagina_web_evento">PaginaWebEvento</string>
 
 </resources>

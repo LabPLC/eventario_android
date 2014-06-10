@@ -75,6 +75,10 @@
             android:name="codigo.labplc.mx.eventario.detalles.mapa.Mapa_llegar_evento"
             android:label="@string/title_activity_mapa_llegar_evento" >
         </activity>
+        <activity
+            android:name="codigo.labplc.mx.eventario.web.PaginaWebEvento"
+            android:label="@string/title_activity_pagina_web_evento" >
+        </activity>
     </application>
 
 </manifest>
