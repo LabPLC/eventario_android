@@ -19,7 +19,15 @@
     <string name="configuracion_aceptar">Aceptar</string>
     <string name="configuracion_titulo_distancia">Distancia de búsqueda:</string>
     <string name="title_activity_detalle_evento_">Detalle_evento_Activity</string>
-    
+
     <!-- Detalle evento -->
     <string name="detalle_ab_titulo">Evento</string>
+
+    <!-- dialogo GPS -->
+    <string name="dialogo_gps_titulo">Aviso</string>
+    <string name="dialogo_gps_texto">Evento requiere usar el GPS ¿Quieres encenderlo?</string>
+    <string name="dialogo_gps_cancelar">Cancelar</string>
+    <string name="dialogo_gps_aceptar">Aceptar</string>
+    <string name="title_activity_mapa_llegar_evento">Mapa_llegar_evento</string>
+
 </resources>

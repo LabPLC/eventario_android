@@ -1,10 +1,6 @@
 package codigo.labplc.mx.eventario.customs;
 
-import java.io.InputStream;
-import java.net.URL;
-
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +18,9 @@ public class CustomList extends ArrayAdapter<String> {
     private final String[] hora_inicio;
     private final String[] hora_fin;
     private final String[] distancia;
-    private final String[] imagen;
+    private final int[] imagen;
 
-    public CustomList(Activity context,String[] nombre,String[] hora_inicio,String[] hora_fin,String[] distancia,String[] imagen) {
+    public CustomList(Activity context,String[] nombre,String[] hora_inicio,String[] hora_fin,String[] distancia,int[] imagen) {
         super(context, R.layout.list_simple, nombre);
         this.context = context;
         this.nombre = nombre;
@@ -46,22 +42,11 @@ public class CustomList extends ArrayAdapter<String> {
         TextView txtDistancia = (TextView) rowView.findViewById(R.id.row_tv_tiempo);
         txtDistancia.setText(distancia[position]);
         ImageView row_iv_evento =(ImageView)rowView.findViewById(R.id.row_iv_evento);
-        Drawable drawable = LoadImageFromWebOperations(imagen[position]);
-        row_iv_evento.setImageDrawable(drawable);
+        row_iv_evento.setImageDrawable(context.getResources().getDrawable(imagen[position]));
         return rowView;
     }
     
     
     
-    private Drawable LoadImageFromWebOperations(String url)
-    {
-          try{
-        InputStream is = (InputStream) new URL(url).getContent();
-        Drawable d = Drawable.createFromStream(is, "src name");
-        return d;
-      }catch (Exception e) {
-        System.out.println("Exc="+e);
-        return null;
-      }
-    }
+   
 }

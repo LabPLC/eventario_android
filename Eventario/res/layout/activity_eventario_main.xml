@@ -25,7 +25,7 @@
             android:id="@+id/handle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/rojo_logo"
+            android:background="@color/blanco"
             android:scaleType="centerInside"
             android:src="@drawable/ic_launcher_mas" />
 
@@ -38,18 +38,19 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/rojo_logo"
+                android:background="@color/blanco"
                 android:gravity="center"
                 android:padding="5dp"
                 android:text="@string/mapa_titulo_drawer"
-                android:textColor="@color/blanco" />
+                android:textColor="@color/rojo_logo" />
 
             <ListView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/rojo_logo"
-                android:fadeScrollbars="false" >
+                android:background="@color/blanco"
+                android:fadeScrollbars="false" 
+                android:overScrollMode="never">
             </ListView>
         </LinearLayout>
     </SlidingDrawer>
@@ -66,19 +67,23 @@
         android:layout_marginLeft="5dp"
         android:gravity="center">
 
+        <ImageView
+            android:id="@+id/eventario_main_iv_lupa"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_launcher_buscar"
+            android:background="@drawable/marco" />
         <EditText
-            android:id="@+id/mitaxiregistermanually_et_telemer_2"
+            android:id="@+id/eventario_main_et_direccion"
             android:layout_width="0dp"
             android:layout_weight=".7"
             android:layout_height="50dp"
-            android:drawableLeft="@drawable/ic_launcher_buscar"
             android:ems="10"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:hint="@string/mapa_buscar"
             android:inputType="textAutoComplete"
             android:textColorHint="@android:color/darker_gray"
-            android:textCursorDrawable="@drawable/color_cursor"
             android:background="@drawable/marco"  />
 
         <ImageView

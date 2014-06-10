@@ -1,7 +1,5 @@
 package codigo.labplc.mx.eventario.servicio;
 
-import java.util.ArrayList;
-
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -28,23 +26,24 @@ public class ServicioGeolocalizacion extends Service implements Runnable {
 	 */
 	
 	public final String TAG = this.getClass().getSimpleName();
+	
 	public static Eventario_main taxiActivity;
 	private LocationManager mLocationManager;
 	private MyLocationListener mLocationListener;
-	public static double latitud_inicial = 19.0f;
-	public static double longitud_inicial = -99.0f;
-	public static double latitud =0;
-	public static double longitud=0;
+	private  double latitud_inicial = 19.0f;
+	private  double longitud_inicial = -99.0f;
+	private  double latitud =0;
+	private  double longitud=0;
 	private Location currentLocation = null;
 	private boolean isFirstLocation = true;
 	private Thread thread;
-	Double pointsLat ;
-	Double pointsLon;
+	private Double pointsLat ;
+	private Double pointsLon;
 	private boolean isFirstTime = true;
-	public static boolean serviceIsIniciado = false;
-	public static boolean countTimer = true;
-	public static  boolean panicoActivado = false;
-	public boolean isSendMesagge= false;
+	private static boolean serviceIsIniciado = false;
+	private  static boolean countTimer = true;
+	private static  boolean panicoActivado = false;
+	private boolean isSendMesagge= false;
     private int intervaloLocation =5000;
    
     
@@ -94,7 +93,7 @@ public class ServicioGeolocalizacion extends Service implements Runnable {
 	/**
 	 * handler
 	 */
-	private Handler handler = new Handler() {
+	private Handler handler_eventos = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			// mLocationManager.removeUpdates(mLocationListener);
@@ -119,8 +118,6 @@ public class ServicioGeolocalizacion extends Service implements Runnable {
 				longitud_inicial = longitud;
 				isFirstLocation = false;
 			} 
-		//	pointsLat.add(latitud + "");
-		//	pointsLon.add(longitud + "");
 			
 			Intent intent = new Intent("key");
 			intent.putExtra("latitud", latitud);
@@ -177,7 +174,7 @@ public class ServicioGeolocalizacion extends Service implements Runnable {
 			// Log.d("finura",loc.getAccuracy()+"");
 			if (loc != null) {
 				setCurrentLocation(loc);
-				handler.sendEmptyMessage(0);
+				handler_eventos.sendEmptyMessage(1000);
 			}
 		}
 

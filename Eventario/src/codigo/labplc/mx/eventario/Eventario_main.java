@@ -1,6 +1,11 @@
 package codigo.labplc.mx.eventario;
 
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -8,11 +13,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
+import android.os.SystemClock;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SlidingDrawer;
@@ -20,9 +28,12 @@ import android.widget.SlidingDrawer.OnDrawerCloseListener;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import codigo.labplc.mx.eventario.bean.InfoPointBean;
 import codigo.labplc.mx.eventario.bean.beanEventos;
 import codigo.labplc.mx.eventario.configuracion.Configuracion_activity;
 import codigo.labplc.mx.eventario.customs.CustomList;
+import codigo.labplc.mx.eventario.detalles.Detalle_evento_Activity;
+import codigo.labplc.mx.eventario.dialogos.Dialogos;
 import codigo.labplc.mx.eventario.servicio.ServicioGeolocalizacion;
 import codigo.labplc.mx.eventario.utils.Utils;
 
@@ -38,16 +49,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
+@SuppressWarnings("deprecation")
 public class Eventario_main extends Activity {
 
 	public final String TAG = this.getClass().getSimpleName();
 
 	
 	private GoogleMap map;
-	private double lat=0.0;
-	private double lon=0.0;
+	public static double lat=19.0;
+	public static double lon=-99.0;
 	private MarkerOptions marker;
-	private Handler updateBarHandler;
 	private ProgressDialog pDialog;
 	private int isLocalizado = 0;
     private ListView list;
@@ -56,32 +67,47 @@ public class Eventario_main extends Activity {
 	private String progreso;
 	private String id_ubicacion;
 	private String[] id_markers;
+	private boolean pause=false;
+	private long lastTouched = 0;
+	private static final long SCROLL_TIME = 200L;
+	 EditText eventario_main_et_direccion ;
+	 ArrayList<InfoPointBean> InfoPoint;
 	
+	private LocationManager mLocationManager_eventos;
 	
+
 	
-	@SuppressWarnings({ "deprecation" })
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_eventario_main);
-		
-		
-		
+		mLocationManager_eventos = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		if (!mLocationManager_eventos.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			new Dialogos().showDialogGPS(Eventario_main.this).show();		
+		}else{
+			init();
+		}
+			
+	}
+	
+	public void init(){
 		ServicioGeolocalizacion.taxiActivity = Eventario_main.this;
 		startService(new Intent(Eventario_main.this,ServicioGeolocalizacion.class));
-		 
-		
+
 		 SharedPreferences prefs = getSharedPreferences("MisPreferenciasEventario",Context.MODE_PRIVATE);
 		 progreso = prefs.getString("progreso", null);
+		 
 		 if(progreso!=null){
 			 radio=progreso;
 		 }
 		
-	     if(lat==0.0){
-	    	 updateBarHandler = new Handler();
-	    	 launchRingDialog();
+	     if(lat==19.0){
+	    	anillo();
 	     }
-	    		
+	    	
+	     
+	      eventario_main_et_direccion = (EditText)findViewById(R.id.eventario_main_et_direccion);
+	     
 		final ImageView handle= (ImageView)findViewById(R.id.handle);
 		SlidingDrawer drawer = (SlidingDrawer)findViewById(R.id.drawer);
 		drawer.setOnDrawerOpenListener(new OnDrawerOpenListener() {
@@ -108,10 +134,12 @@ public class Eventario_main extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				CameraPosition cameraPosition;
-					 cameraPosition = new CameraPosition.Builder().target(new LatLng(lat, lon)).zoom(16).build();
+			//	cargarMapa(lat,lon);
 				
+				CameraPosition cameraPosition;
+				cameraPosition = new CameraPosition.Builder().target(new LatLng(lat, lon)).zoom(map.getCameraPosition().zoom).build();
 				map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+				cargarMapa(lat,lon);
 				
 			}
 		});
@@ -123,17 +151,40 @@ public class Eventario_main extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(Eventario_main.this,Configuracion_activity.class);
-			startActivity(intent);
-			finish();
+				startActivity(intent);
+				finish();
 				
 			}
 		});
 		
+		ImageView eventario_main_iv_lupa =(ImageView)findViewById(R.id.eventario_main_iv_lupa);
+		eventario_main_iv_lupa.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String direccion_busqueda=   eventario_main_et_direccion.getText().toString(); 
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+	        	imm.hideSoftInputFromWindow(eventario_main_et_direccion.getWindowToken(), 0);
+	        	  
+				if(!direccion_busqueda.equals("")){
+					InfoPoint = null;
+					InfoPoint =Utils.busquedaDireccion(direccion_busqueda);
+					if(InfoPoint!=null){
+						
+						CameraPosition cameraPosition;
+						cameraPosition = new CameraPosition.Builder().target(new LatLng(InfoPoint.get(0).getDblLatitude(), InfoPoint.get(0).getDblLongitude())).zoom(map.getCameraPosition().zoom).build();
+						map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+						cargarMapa(InfoPoint.get(0).getDblLatitude(), InfoPoint.get(0).getDblLongitude());
+					}
+				}
+				
+			}
+		});
+		
+		
+		
 		setUpMapIfNeeded();
 		
-		
-		
-			
 	}
 	
 	public boolean cargarEventos(){
@@ -144,11 +195,8 @@ public class Eventario_main extends Activity {
 			        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			            @Override
 			            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-			            	
-			               	Intent intent = new Intent(Eventario_main.this,Detalle_evento_Activity.class);
-			            	intent.putExtra("id_evento", bean.getId_marker()[position]);
-			            	startActivity(intent);
-			               Toast.makeText(Eventario_main.this, "You Clicked at " +bean.getId_marker()[position], Toast.LENGTH_SHORT).show();
+			       
+			            	abrirDetalles(bean.getId_marker()[position]);
 			            }
 			        });
 			    
@@ -159,6 +207,16 @@ public class Eventario_main extends Activity {
 		}
 		
 	}
+	
+	public void anillo(){
+		pDialog = new ProgressDialog(Eventario_main.this);
+ 		pDialog.setCanceledOnTouchOutside(false);
+ 		pDialog.setMessage(getResources().getString(R.string.mapa_texto_significado_el_viaje_inicio));
+ 		pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+ 		pDialog.setCancelable(false);
+ 		pDialog.show();
+	}
+	
 	
 	
 	/**
@@ -225,28 +283,12 @@ public class Eventario_main extends Activity {
 	}
 	
 	
-	
-	/**
-	 * crea el dialogo de espera al cargar el mapa
-	 * 
-	 */
-	public void launchRingDialog() {
-
-		pDialog = new ProgressDialog(Eventario_main.this);
-		pDialog.setCanceledOnTouchOutside(false);
-		pDialog.setMessage(getResources().getString(R.string.mapa_texto_significado_el_viaje_inicio));
-		pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		pDialog.setCancelable(true);
-		pDialog.show();
-	}	
-	
-	
-	
 	/**
 	 * manejo de transmiciones
 	 */
 	private BroadcastReceiver onBroadcast = new BroadcastReceiver() {
 
+		@SuppressLint("SimpleDateFormat")
 		@Override
 		public void onReceive(Context ctxt, Intent t) {
 			
@@ -254,32 +296,26 @@ public class Eventario_main extends Activity {
 			lon = t.getDoubleExtra("longitud",-99.0f);
 			
 			if(isLocalizado==0){
-				bean = Utils.llenarEventos(lat+"",lon+"",radio);
-				if(bean!=null){
-					cargarEventos();	
-				}
+				cargarMapa(lat,lon);
 			}
 			
-		
 			CameraPosition cameraPosition;
 			cameraPosition = new CameraPosition.Builder().target(new LatLng(lat, lon)).zoom(14).build();
-			map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-			map.clear();
+			map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));			
 			
 			map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
-				
 				@Override
 				public void onInfoWindowClick(Marker marker) {
-
 					if(!marker.getId().toString().equals(id_ubicacion)){
-						Intent intent = new Intent(Eventario_main.this,Detalle_evento_Activity.class);
-						intent.putExtra("id_evento", marker.getId());
-						startActivity(intent);
-						//Toast.makeText(Eventario_main.this, "You Clicked at " +marker.getId(), Toast.LENGTH_SHORT).show();
+						abrirDetalles(marker.getId().toString());
 					}
 					
 				}
+
+				
 			});
+	
+			
 			map.setInfoWindowAdapter(new InfoWindowAdapter() {
 	            @Override
 	            public View getInfoWindow(Marker marker) {              
@@ -308,58 +344,166 @@ public class Eventario_main extends Activity {
 
 	            }
 	        });
-			marker.position(new LatLng(lat,lon));
-			Marker m=map.addMarker(marker);
-			id_ubicacion=m.getId();
-		   	
-		   
-			id_markers = new String[bean.getLatitud().length];
-			
-			for(int i=0;i<bean.getLatitud().length;i++){
-				MarkerOptions markerte= new MarkerOptions();
-				markerte.position(new LatLng(Double.parseDouble(bean.getLatitud()[i]), Double.parseDouble(bean.getLongitud()[i])));
-				markerte.title(bean.getNombre()[i]+"@@"+bean.getLugar()[i]);
-				markerte.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher_pin));
-				Marker ma =map.addMarker(markerte);
-				id_markers[i] = ma.getId();
-			}
-		   	bean.setId_marker(id_markers);
-		 	//
-		 	if(isLocalizado>=1){
+			if(isLocalizado>=1){
 		 		if(pDialog!=null){
 			 		pDialog.dismiss();
-			 		
-			 		
 			 	}
 		 		stopService(new Intent(Eventario_main.this, ServicioGeolocalizacion.class));
 		 	}else{
 		 		isLocalizado+=1;
 		 	}
+			
 		}
 	};
+	
+	
+	@SuppressLint("SimpleDateFormat")
+	public void cargarMapa(double lat_, double lon_){
+		
+		map.clear();
+		Calendar c = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String horaInicio = sdf.format(c.getTime());
+		if(Utils.isNetworkConnectionOk(getApplicationContext())){
+			bean = Utils.llenarEventos(lat_+"",lon_+"",radio,horaInicio);
+		}else{
+			Toast.makeText(getApplicationContext(), "No tienes Internet", Toast.LENGTH_SHORT).show();
+		}
+		if(bean!=null){
+			cargarEventos();	
+		}else{
+			Toast.makeText(getApplicationContext(), "No hay eventos cerca de ti", Toast.LENGTH_SHORT).show();
+		}
+		marker.position(new LatLng(lat_,lon_));
+		Marker m=map.addMarker(marker);
+		id_ubicacion=m.getId();
+	   	
+	   if(bean!=null){
+		id_markers = new String[bean.getLatitud().length];
+
+		for(int i=0;i<bean.getLatitud().length;i++){
+			MarkerOptions markerte= new MarkerOptions();
+			markerte.position(new LatLng(Double.parseDouble(bean.getLatitud()[i]), Double.parseDouble(bean.getLongitud()[i])));
+			markerte.title(bean.getNombre()[i]+"@@"+bean.getLugar()[i]);
+			markerte.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher_pin));
+			Marker ma =map.addMarker(markerte);
+			id_markers[i] = ma.getId();
+		}
+	   	bean.setId_marker(id_markers);
+	   }
+	  
+	   if(pDialog!=null){
+		   pDialog.dismiss();
+	 	}
+		
+	}
 	
 		@Override
 		protected void onDestroy() {
 		if(pDialog!=null){
 	    	pDialog.dismiss();
-	    	}
+	    }
+		
+			isLocalizado=0;
 			super.onDestroy();
 		}
 
 		@Override
 		protected void onPause() {
-			unregisterReceiver(onBroadcast);
+			pause= true;
+			try{
+				unregisterReceiver(onBroadcast);
+				if(pDialog!=null){
+			 		pDialog.dismiss();	
+			 	}
+				
+		 		stopService(new Intent(Eventario_main.this, ServicioGeolocalizacion.class));
+			}catch(Exception e){
+				
+			}
 			super.onPause();
 		}
 
 		@Override
 		protected void onResume() {
-			registerReceiver(onBroadcast, new IntentFilter("key"));
+			if(Dialogos.customDialog!=null){
+				Dialogos.customDialog.dismiss();
+			}
+			if (!mLocationManager_eventos.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+				new Dialogos().showDialogGPS(Eventario_main.this).show();		
+			}else{
+				if(pause){
+					 init();
+					 pause=false;
+				}
+			}
+			try{
+					 registerReceiver(onBroadcast, new IntentFilter("key"));
+			}catch(Exception e){}
 			
 			super.onResume();
 		}
 
 		
-	
+		public void abrirDetalles(String id) {
+			for(int i=0;i<bean.getId_marker().length;i++){
+				if(bean.getId_marker()[i].toString().equals(id)){
+						Intent intent = new Intent(Eventario_main.this,Detalle_evento_Activity.class);
+						intent.putExtra("nombre", bean.getNombre()[i]);
+						intent.putExtra("lugar", bean.getLugar()[i]);
+						intent.putExtra("hora_inicio", bean.getHora_inicio()[i]);
+						intent.putExtra("hora_fin", bean.getHora_fin()[i]);
+						intent.putExtra("imagen", bean.getImagen()[i]);
+						intent.putExtra("descripcion", bean.getDescripcion()[i]);
+						intent.putExtra("precio", bean.getPrecio()[i]);
+						intent.putExtra("direccion", bean.getDireccion()[i]);
+						intent.putExtra("fuente", bean.getFuente()[i]);
+						intent.putExtra("fecha_inicio", bean.getFecha_inicio()[i]);
+						intent.putExtra("fecha_fin", bean.getFecha_fin()[i]);
+						intent.putExtra("categoria", bean.getCategoria()[i]);
+						intent.putExtra("contacto", bean.getContacto()[i]);
+						intent.putExtra("pagina", bean.getPagina()[i]);
+						intent.putExtra("latitud", bean.getLatitud()[i]);
+						intent.putExtra("longitud", bean.getLongitud()[i]);
+						intent.putExtra("distancia", bean.getDistancia()[i]);
+						intent.putExtra("url", bean.getUrl()[i]);
+						intent.putExtra("id_marker", bean.getId_marker()[i]);
+						intent.putExtra("mi_latitud", lat);
+						intent.putExtra("mi_longitud", lon);
+						startActivity(intent);
+						break;
+				}
+			}
+
+			
+		}
+
+		@Override
+		public void onBackPressed() {
+			if(Dialogos.customDialog!=null){
+				Dialogos.customDialog.dismiss();
+				finish();
+			}else{
+				super.onBackPressed();	
+			}
+		}
+		
+		@Override
+		public boolean dispatchTouchEvent(MotionEvent ev) {
+			switch (ev.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				lastTouched = SystemClock.uptimeMillis();
+				break;
+			case MotionEvent.ACTION_UP:
+				final long now = SystemClock.uptimeMillis();
+				if ((now - lastTouched > SCROLL_TIME)&&
+						Utils.getDistanceMeters(lat, lon,map.getCameraPosition().target.latitude, map.getCameraPosition().target.longitude)>=1000) {
+						anillo();
+						cargarMapa(map.getCameraPosition().target.latitude,map.getCameraPosition().target.longitude);
+				}
+				break;
+			}
+			return super.dispatchTouchEvent(ev);
+		}	
 
 }

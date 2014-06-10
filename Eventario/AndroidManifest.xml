@@ -68,8 +68,12 @@
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
-            android:name="codigo.labplc.mx.eventario.Detalle_evento_Activity"
+            android:name="codigo.labplc.mx.eventario.detalles.Detalle_evento_Activity"
             android:label="@string/title_activity_detalle_evento_" >
+        </activity>
+        <activity
+            android:name="codigo.labplc.mx.eventario.detalles.mapa.Mapa_llegar_evento"
+            android:label="@string/title_activity_mapa_llegar_evento" >
         </activity>
     </application>
 
