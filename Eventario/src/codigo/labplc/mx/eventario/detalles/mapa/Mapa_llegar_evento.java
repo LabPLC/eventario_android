@@ -28,7 +28,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 import codigo.labplc.mx.eventario.R;
 import codigo.labplc.mx.eventario.utils.DirectionsJSONParser;
 
@@ -351,7 +350,8 @@ public class Mapa_llegar_evento extends FragmentActivity implements OnClickListe
             
             MarkerOptions destino_marker = new MarkerOptions();
             destino_marker.position( new LatLng(Double.parseDouble(lat_), Double.parseDouble(lng_)));
-            destino_marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            destino_marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher_pin));
+            destino_marker.title("Evento");
             map.addMarker(destino_marker); 
           
             

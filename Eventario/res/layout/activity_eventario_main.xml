@@ -27,7 +27,8 @@
             android:layout_height="wrap_content"
             android:background="@color/blanco"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_launcher_mas" />
+            android:src="@drawable/ic_launcher_mas"
+            android:contentDescription="@string/app_name" />
 
         <LinearLayout
             android:id="@+id/content"
@@ -73,7 +74,8 @@
             android:layout_width="40dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_launcher_buscar"
-            android:background="@drawable/marco" />
+            android:background="@drawable/marco"
+            android:contentDescription="@string/app_name" />
         <EditText
             android:id="@+id/eventario_main_et_direccion"
             android:layout_width="0dp"
@@ -92,13 +94,15 @@
             android:layout_width="40dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_launcher_gps"
-            android:background="@drawable/marco" />
+            android:background="@drawable/marco"
+            android:contentDescription="@string/app_name" />
          <ImageView
             android:id="@+id/eventario_main_iv_config"
             android:layout_width="40dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_launcher_tools"
-              android:background="@drawable/marco" />
+              android:background="@drawable/marco"
+              android:contentDescription="@string/app_name" />
 
     </LinearLayout>
 
@@ -115,6 +119,6 @@
         android:layout_marginRight="20dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="5dp"
-        android:text="Buscar en esta zona" />
+        android:text="@string/mapa_titulo_boton_mas" />
 
 </RelativeLayout>

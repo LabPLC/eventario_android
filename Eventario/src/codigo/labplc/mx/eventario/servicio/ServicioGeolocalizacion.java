@@ -1,5 +1,6 @@
 package codigo.labplc.mx.eventario.servicio;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import codigo.labplc.mx.eventario.R;
  * @author mikesaurio
  * 
  */
+@SuppressWarnings("unused")
 public class ServicioGeolocalizacion extends Service implements Runnable {
 	/**
 	 * Declaraci—n de variables
@@ -30,6 +32,7 @@ public class ServicioGeolocalizacion extends Service implements Runnable {
 	public static Eventario_main taxiActivity;
 	private LocationManager mLocationManager;
 	private MyLocationListener mLocationListener;
+
 	private  double latitud_inicial = 19.0f;
 	private  double longitud_inicial = -99.0f;
 	private  double latitud =0;
@@ -61,6 +64,7 @@ public class ServicioGeolocalizacion extends Service implements Runnable {
 	
 	
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onStart(Intent intent, int startId) {
 		//Toast.makeText(taxiActivity, "Servicio creado ", Toast.LENGTH_SHORT).show();
@@ -93,6 +97,7 @@ public class ServicioGeolocalizacion extends Service implements Runnable {
 	/**
 	 * handler
 	 */
+	@SuppressLint("HandlerLeak")
 	private Handler handler_eventos = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {

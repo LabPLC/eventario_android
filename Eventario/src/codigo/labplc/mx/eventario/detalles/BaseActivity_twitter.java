@@ -6,8 +6,12 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.widget.Toast;
-
-public class BaseActivity extends Activity {
+/**
+ * clase base para datos de twitter
+ * @author mikesaurio
+ *
+ */
+public class BaseActivity_twitter extends Activity {
 	private SharedPreferences mSharedPref;
 	
 	private static final String SHARED_PREF = "android_twitter";

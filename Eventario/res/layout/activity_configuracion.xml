@@ -54,8 +54,8 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/view1"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
         android:text="@string/configuracion_acercade" />
 
     <View
@@ -73,7 +73,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/View01"
         android:layout_marginBottom="10dp"
-          android:layout_marginLeft="5dp"
+          android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:text="@string/configuracion_terminos" />
 
@@ -94,6 +94,7 @@
         android:layout_margin="5dp"
         android:background="@drawable/selector_btn_generic"
         android:textColor="@drawable/selector_txt_boton_redondo"
+        android:gravity="center"
         android:text="@string/configuracion_aceptar" />
 
 </RelativeLayout>

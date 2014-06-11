@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.MotionEvent;
@@ -49,11 +50,15 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
+/**
+ * clase principal 
+ * @author mikesaurio
+ *
+ */
 @SuppressWarnings("deprecation")
 public class Eventario_main extends Activity {
 
 	public final String TAG = this.getClass().getSimpleName();
-
 	
 	private GoogleMap map;
 	public static double lat=19.0;
@@ -70,12 +75,10 @@ public class Eventario_main extends Activity {
 	private boolean pause=false;
 	private long lastTouched = 0;
 	private static final long SCROLL_TIME = 200L;
-	 EditText eventario_main_et_direccion ;
-	 ArrayList<InfoPointBean> InfoPoint;
-	 Button eventario_main_btn_busca_aqui;
-	
-//	private LocationManager mLocationManager_eventos;
-	
+	private  EditText eventario_main_et_direccion ;
+	private  ArrayList<InfoPointBean> InfoPoint;
+	private  Button eventario_main_btn_busca_aqui;
+	public String lat_,lon_;
 
 	
 	@Override
@@ -91,12 +94,13 @@ public class Eventario_main extends Activity {
 			
 	}
 	
+	/**
+	 * inflado de la vista
+	 */
 	public void init(){
 		
 		ServicioGeolocalizacion.taxiActivity = Eventario_main.this;
 		startService(new Intent(Eventario_main.this,ServicioGeolocalizacion.class));
-
-		
 		
 		 SharedPreferences prefs = getSharedPreferences("MisPreferenciasEventario",Context.MODE_PRIVATE);
 		 progreso = prefs.getString("progreso", null);
@@ -110,7 +114,7 @@ public class Eventario_main extends Activity {
 	     }
 	    	
 	     list=(ListView)findViewById(R.id.list);
-	      eventario_main_et_direccion = (EditText)findViewById(R.id.eventario_main_et_direccion);
+	     eventario_main_et_direccion = (EditText)findViewById(R.id.eventario_main_et_direccion);
 	     
 		final ImageView handle= (ImageView)findViewById(R.id.handle);
 		SlidingDrawer drawer = (SlidingDrawer)findViewById(R.id.drawer);
@@ -131,19 +135,17 @@ public class Eventario_main extends Activity {
 			}
 		});
 		
-		
-		
 		ImageView eventario_main_iv_gps =(ImageView)findViewById(R.id.eventario_main_iv_gps);
 		eventario_main_iv_gps.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-			//	cargarMapa(lat,lon);
 				
 				CameraPosition cameraPosition;
 				cameraPosition = new CameraPosition.Builder().target(new LatLng(lat, lon)).zoom(map.getCameraPosition().zoom).build();
 				map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-				cargarMapa(lat,lon);
+				Uploaded nuevaTareas = new Uploaded();
+				nuevaTareas.execute(lat+"",lon+"");
 				
 			}
 		});
@@ -178,7 +180,10 @@ public class Eventario_main extends Activity {
 						CameraPosition cameraPosition;
 						cameraPosition = new CameraPosition.Builder().target(new LatLng(InfoPoint.get(0).getDblLatitude(), InfoPoint.get(0).getDblLongitude())).zoom(map.getCameraPosition().zoom).build();
 						map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-						cargarMapa(InfoPoint.get(0).getDblLatitude(), InfoPoint.get(0).getDblLongitude());
+						
+						Uploaded nuevaTareas = new Uploaded();
+						nuevaTareas.execute(InfoPoint.get(0).getDblLatitude()+"", InfoPoint.get(0).getDblLongitude()+"");
+					//	cargarMapa(InfoPoint.get(0).getDblLatitude(), InfoPoint.get(0).getDblLongitude());
 					}
 				}
 				
@@ -191,7 +196,9 @@ public class Eventario_main extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				cargarMapa(map.getCameraPosition().target.latitude,map.getCameraPosition().target.longitude);
+				Uploaded nuevaTareas = new Uploaded();
+				nuevaTareas.execute(map.getCameraPosition().target.latitude+"",map.getCameraPosition().target.longitude+"");
+				//cargarMapa(map.getCameraPosition().target.latitude,map.getCameraPosition().target.longitude);
 				
 			}
 		});
@@ -199,9 +206,13 @@ public class Eventario_main extends Activity {
 		
 	}
 	
+	
+	/**
+	 * carga en la lista los eventos 
+	 * @return
+	 */
 	public boolean cargarEventos(){
 		try{
-			      //  list.removeAllViews();
 			        CustomList adapter = new CustomList(Eventario_main.this, bean.getNombre(), bean.getHora_inicio(),bean.getHora_fin(),bean.getDistancia(),bean.getImagen());
 			        list.setAdapter(adapter);
 			        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -220,6 +231,9 @@ public class Eventario_main extends Activity {
 		
 	}
 	
+	/**
+	 * dialogo de espera
+	 */
 	public void anillo(){
 		pDialog = new ProgressDialog(Eventario_main.this);
  		pDialog.setCanceledOnTouchOutside(false);
@@ -308,7 +322,8 @@ public class Eventario_main extends Activity {
 			lon = t.getDoubleExtra("longitud",-99.0f);
 			
 			if(isLocalizado==0){
-				cargarMapa(lat,lon);
+				Uploaded nuevaTareas = new Uploaded();
+				nuevaTareas.execute(lat+"",lon+"");
 			}
 			
 			CameraPosition cameraPosition;
@@ -357,11 +372,12 @@ public class Eventario_main extends Activity {
 	            }
 	        });
 			if(isLocalizado>=1){
+		 		
+		 		stopService(new Intent(Eventario_main.this, ServicioGeolocalizacion.class));
+		 	}else{
 		 		if(pDialog!=null){
 			 		pDialog.dismiss();
 			 	}
-		 		stopService(new Intent(Eventario_main.this, ServicioGeolocalizacion.class));
-		 	}else{
 		 		isLocalizado+=1;
 		 	}
 			
@@ -369,44 +385,8 @@ public class Eventario_main extends Activity {
 	};
 	
 	
-	@SuppressLint("SimpleDateFormat")
-	public void cargarMapa(double lat_, double lon_){
-		
-		map.clear();
-		Calendar c = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String horaInicio = sdf.format(c.getTime());
-	//	if(!Utils.isNetworkConnectionOk(Eventario_main.this)){
-		bean= null;
-		bean = Utils.llenarEventos(lat_+"",lon_+"",radio,horaInicio);
-		if(bean!=null){
-			cargarEventos();	
-		}else{
-			Toast.makeText(getApplicationContext(), "No hay eventos cerca de ti", Toast.LENGTH_SHORT).show();
-		}
-		marker.position(new LatLng(lat_,lon_));
-		Marker m=map.addMarker(marker);
-		id_ubicacion=m.getId();
-	   	
-	   if(bean!=null){
-		id_markers = new String[bean.getLatitud().length];
-
-		for(int i=0;i<bean.getLatitud().length;i++){
-			MarkerOptions markerte= new MarkerOptions();
-			markerte.position(new LatLng(Double.parseDouble(bean.getLatitud()[i]), Double.parseDouble(bean.getLongitud()[i])));
-			markerte.title(bean.getNombre()[i]+"@@"+bean.getLugar()[i]);
-			markerte.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher_pin));
-			Marker ma =map.addMarker(markerte);
-			id_markers[i] = ma.getId();
-		}
-	   	bean.setId_marker(id_markers);
-	   }
-	  
-	   if(pDialog!=null){
-		   pDialog.dismiss();
-	 	}
-		
-	}
+	
+	
 	
 		@Override
 		protected void onDestroy() {
@@ -454,7 +434,11 @@ public class Eventario_main extends Activity {
 			super.onResume();
 		}
 
-		
+				
+		/**
+		 * Crea un intent para pasar toda la informacion
+		 * @param id (String) identificador 
+		 */
 		public void abrirDetalles(String id) {
 			for(int i=0;i<bean.getId_marker().length;i++){
 				if(bean.getId_marker()[i].toString().equals(id)){
@@ -508,9 +492,7 @@ public class Eventario_main extends Activity {
 				final long now = SystemClock.uptimeMillis();
 				if ((now - lastTouched > SCROLL_TIME)&&
 						Utils.getDistanceMeters(lat, lon,map.getCameraPosition().target.latitude, map.getCameraPosition().target.longitude)>=1000) {
-					//	anillo();
 					eventario_main_btn_busca_aqui.setVisibility(Button.VISIBLE);
-						//cargarMapa(map.getCameraPosition().target.latitude,map.getCameraPosition().target.longitude);
 				}else{
 					eventario_main_btn_busca_aqui.setVisibility(Button.INVISIBLE);
 				}
@@ -518,5 +500,83 @@ public class Eventario_main extends Activity {
 			}
 			return super.dispatchTouchEvent(ev);
 		}	
+		
+		
+		/**
+		 * hilo que controla las actualizaciones del mapa
+		 * @author mikesaurio
+		 *
+		 */
+		class Uploaded extends AsyncTask<String, Void, Void> {
+			
+			public static final int HTTP_TIMEOUT = 60 * 1000;
+			private ProgressDialog pDialog_hilo;
+			@SuppressLint("SimpleDateFormat")
+			@Override
+			protected Void doInBackground(String... params) {
+				lat_ =(String) params[0];
+				lon_ =(String) params[1];
+				try
+				{	
+					Calendar c = Calendar.getInstance();
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					String horaInicio = sdf.format(c.getTime());
+					
+					bean= null;
+					bean = Utils.llenarEventos(lat_+"",lon_+"",radio,horaInicio);
+					
+					if(bean!=null){
+						cargarEventos();	
+					}else{
+						Toast.makeText(getApplicationContext(), "No hay eventos cerca de ti", Toast.LENGTH_SHORT).show();
+					}
+				} catch (Exception e) {
+					e.getStackTrace();
+				}
+				return null;
+			}
+
+			protected void onPreExecute() {
+				
+				pDialog_hilo = new ProgressDialog(Eventario_main.this);
+				pDialog_hilo.setCanceledOnTouchOutside(false);
+				pDialog_hilo.setMessage("Actualizando");
+				pDialog_hilo.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				pDialog_hilo.setCancelable(true);
+				pDialog_hilo.show();
+				super.onPreExecute();
+				
+			}
+
+			protected void onPostExecute(Void result) {
+				map.clear();
+				
+				marker.position(new LatLng(Double.parseDouble(lat_),Double.parseDouble(lon_)));
+				Marker m=map.addMarker(marker);
+				id_ubicacion=m.getId();
+			   	
+			   if(bean!=null){
+				id_markers = new String[bean.getLatitud().length];
+
+				for(int i=0;i<bean.getLatitud().length;i++){
+					MarkerOptions markerte= new MarkerOptions();
+					markerte.position(new LatLng(Double.parseDouble(bean.getLatitud()[i]), Double.parseDouble(bean.getLongitud()[i])));
+					markerte.title(bean.getNombre()[i]+"@@"+bean.getLugar()[i]);
+					markerte.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher_pin));
+					Marker ma =map.addMarker(markerte);
+					id_markers[i] = ma.getId();
+				}
+			   	bean.setId_marker(id_markers);
+			   }
+				
+			   pDialog_hilo.dismiss();
+				 
+			   super.onPostExecute(result);	
+					
+					
+				}
+				
+			
+		}
 
 }

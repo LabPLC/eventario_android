@@ -12,6 +12,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import codigo.labplc.mx.eventario.Eventario_main;
 import codigo.labplc.mx.eventario.R;
+import codigo.labplc.mx.eventario.dialogos.Dialogos;
 
 public class Configuracion_activity extends Activity implements OnSeekBarChangeListener{
 
@@ -34,9 +35,28 @@ public class Configuracion_activity extends Activity implements OnSeekBarChangeL
 			}
 		});
 		
-		 	configuracion_tv_distancia =(TextView) findViewById(R.id.configuracion_tv_distancia);
-
 	    
+			TextView  configuracion_tv_acercade =(TextView)findViewById(R.id.configuracion_tv_acercade);
+			configuracion_tv_acercade.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+
+					new Dialogos().showDialogExtras(Configuracion_activity.this, "Acerca de",getResources().getString(R.string.detalle_acerca_de)).show();
+				}
+			});
+			
+			TextView  configuracion_tv_terminosuso =(TextView)findViewById(R.id.configuracion_tv_terminosuso);
+			configuracion_tv_terminosuso.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					new Dialogos().showDialogExtras(Configuracion_activity.this, "Terminos de uso", getResources().getString(R.string.detalle_terminos)).show();
+					
+				}
+			});
+	    
+		 	configuracion_tv_distancia =(TextView) findViewById(R.id.configuracion_tv_distancia);
 			SeekBar    seekbar = (SeekBar)findViewById(R.id.configuracion_sb_distancia); // make seekbar object
 	        seekbar.setOnSeekBarChangeListener(this); 
 	        SharedPreferences prefs = getSharedPreferences("MisPreferenciasEventario",Context.MODE_PRIVATE);

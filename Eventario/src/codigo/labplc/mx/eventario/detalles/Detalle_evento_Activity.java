@@ -25,7 +25,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 import codigo.labplc.mx.eventario.R;
@@ -42,8 +41,12 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-
-public class Detalle_evento_Activity extends BaseActivity implements OnClickListener{
+/**
+ * clase que 
+ * @author mikesaurio
+ *
+ */
+public class Detalle_evento_Activity extends BaseActivity_twitter implements OnClickListener{
 
 	private String nombre;
 	private String lugar;
@@ -67,7 +70,6 @@ public class Detalle_evento_Activity extends BaseActivity implements OnClickList
 	
 	private GoogleMap map;
 	private MarkerOptions marker;
-	private ShareActionProvider mShareActionProvider;
 	
 	
 	private Twitter mTwitter;
@@ -440,15 +442,7 @@ public class Detalle_evento_Activity extends BaseActivity implements OnClickList
 			});
 		}
 		
-		 /** Returns a share intent */
-	    private Intent getDefaultShareIntent(){
-	        Intent intent = new Intent(Intent.ACTION_SEND);
-	        intent.setType("text/plain");
-	        intent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT");
-	        intent.putExtra(Intent.EXTRA_TEXT,"Extra Text");
-	        return intent;
-	    }
-		
+				
 		
 		
 }

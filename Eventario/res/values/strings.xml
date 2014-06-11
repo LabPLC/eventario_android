@@ -12,6 +12,7 @@
     <string name="mapa_texto_significado_el_viaje_inicio">Espere, lo estamos localizando</string>
     <string name="mapa_buscar">Buscar</string>
     <string name="title_activity_configuracion_activity">Configuracion_activity</string>
+    <string name="mapa_titulo_boton_mas">Buscar en esta zona</string>
 
     <!-- Configuracion -->
     <string name="configuracion_terminos">Terminos de uso</string>
@@ -22,6 +23,8 @@
 
     <!-- Detalle evento -->
     <string name="detalle_ab_titulo">Evento</string>
+      <string name="detalle_acerca_de">Evento</string>
+        <string name="detalle_terminos">Evento</string>
 
     <!-- dialogo GPS -->
     <string name="dialogo_gps_titulo">Aviso</string>
