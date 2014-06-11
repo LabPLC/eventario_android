@@ -49,9 +49,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/blanco"
-                android:fadeScrollbars="false" 
-                android:overScrollMode="never">
+                android:fadeScrollbars="false"
+                android:overScrollMode="never" >
             </ListView>
+
         </LinearLayout>
     </SlidingDrawer>
 
@@ -65,7 +66,7 @@
         android:orientation="horizontal"
         android:layout_marginRight="5dp"
         android:layout_marginLeft="5dp"
-        android:gravity="center">
+        android:gravity="center" android:id="@+id/linearLayout1">
 
         <ImageView
             android:id="@+id/eventario_main_iv_lupa"
@@ -100,5 +101,18 @@
               android:background="@drawable/marco" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/eventario_main_btn_busca_aqui"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayout1"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/linearLayout1"
+        android:background="@drawable/selector_btn_generic"
+        android:textColor="@drawable/selector_txt_boton_redondo"
+        android:visibility="invisible"
+        android:layout_margin="5dp"
+        android:text="Buscar en esta zona" />
 
 </RelativeLayout>

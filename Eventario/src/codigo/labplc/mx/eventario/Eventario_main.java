@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -71,6 +72,7 @@ public class Eventario_main extends Activity {
 	private static final long SCROLL_TIME = 200L;
 	 EditText eventario_main_et_direccion ;
 	 ArrayList<InfoPointBean> InfoPoint;
+	 Button eventario_main_btn_busca_aqui;
 	
 //	private LocationManager mLocationManager_eventos;
 	
@@ -94,6 +96,8 @@ public class Eventario_main extends Activity {
 		ServicioGeolocalizacion.taxiActivity = Eventario_main.this;
 		startService(new Intent(Eventario_main.this,ServicioGeolocalizacion.class));
 
+		
+		
 		 SharedPreferences prefs = getSharedPreferences("MisPreferenciasEventario",Context.MODE_PRIVATE);
 		 progreso = prefs.getString("progreso", null);
 		 
@@ -182,7 +186,15 @@ public class Eventario_main extends Activity {
 		});
 		
 		
-		
+		eventario_main_btn_busca_aqui=(Button)findViewById(R.id.eventario_main_btn_busca_aqui);
+		eventario_main_btn_busca_aqui.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				cargarMapa(map.getCameraPosition().target.latitude,map.getCameraPosition().target.longitude);
+				
+			}
+		});
 		setUpMapIfNeeded();
 		
 	}
@@ -496,8 +508,11 @@ public class Eventario_main extends Activity {
 				final long now = SystemClock.uptimeMillis();
 				if ((now - lastTouched > SCROLL_TIME)&&
 						Utils.getDistanceMeters(lat, lon,map.getCameraPosition().target.latitude, map.getCameraPosition().target.longitude)>=1000) {
-						anillo();
-						cargarMapa(map.getCameraPosition().target.latitude,map.getCameraPosition().target.longitude);
+					//	anillo();
+					eventario_main_btn_busca_aqui.setVisibility(Button.VISIBLE);
+						//cargarMapa(map.getCameraPosition().target.latitude,map.getCameraPosition().target.longitude);
+				}else{
+					eventario_main_btn_busca_aqui.setVisibility(Button.INVISIBLE);
 				}
 				break;
 			}
