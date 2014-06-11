@@ -1,12 +1,11 @@
 package codigo.labplc.mx.eventario.detalles;
 
 import android.app.Activity;
-import android.os.Bundle;
-import android.widget.Toast;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Bundle;
+import android.widget.Toast;
 
 public class BaseActivity extends Activity {
 	private SharedPreferences mSharedPref;

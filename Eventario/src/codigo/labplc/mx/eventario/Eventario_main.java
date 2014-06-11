@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.MotionEvent;
@@ -73,7 +72,7 @@ public class Eventario_main extends Activity {
 	 EditText eventario_main_et_direccion ;
 	 ArrayList<InfoPointBean> InfoPoint;
 	
-	private LocationManager mLocationManager_eventos;
+//	private LocationManager mLocationManager_eventos;
 	
 
 	
@@ -81,8 +80,8 @@ public class Eventario_main extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_eventario_main);
-		mLocationManager_eventos = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		if (!mLocationManager_eventos.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+		//
+		if (!Utils.isNetworkConnectionOk(this)) {
 			new Dialogos().showDialogGPS(Eventario_main.this).show();		
 		}else{
 			init();
@@ -91,6 +90,7 @@ public class Eventario_main extends Activity {
 	}
 	
 	public void init(){
+		
 		ServicioGeolocalizacion.taxiActivity = Eventario_main.this;
 		startService(new Intent(Eventario_main.this,ServicioGeolocalizacion.class));
 
@@ -105,7 +105,7 @@ public class Eventario_main extends Activity {
 	    	anillo();
 	     }
 	    	
-	     
+	     list=(ListView)findViewById(R.id.list);
 	      eventario_main_et_direccion = (EditText)findViewById(R.id.eventario_main_et_direccion);
 	     
 		final ImageView handle= (ImageView)findViewById(R.id.handle);
@@ -189,8 +189,8 @@ public class Eventario_main extends Activity {
 	
 	public boolean cargarEventos(){
 		try{
+			      //  list.removeAllViews();
 			        CustomList adapter = new CustomList(Eventario_main.this, bean.getNombre(), bean.getHora_inicio(),bean.getHora_fin(),bean.getDistancia(),bean.getImagen());
-			        list=(ListView)findViewById(R.id.list);
 			        list.setAdapter(adapter);
 			        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			            @Override
@@ -275,7 +275,7 @@ public class Eventario_main extends Activity {
 		marker.title(getResources().getString(R.string.mapa_inicio_de_viaje));
 		marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher_chinche_llena));
 		
-		CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(lat, lon)).zoom(21).build();
+		CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(lat, lon)).zoom(14).build();
 		map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 		// adding marker
 		Marker m = map.addMarker(marker);	
@@ -364,11 +364,9 @@ public class Eventario_main extends Activity {
 		Calendar c = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String horaInicio = sdf.format(c.getTime());
-		if(Utils.isNetworkConnectionOk(getApplicationContext())){
-			bean = Utils.llenarEventos(lat_+"",lon_+"",radio,horaInicio);
-		}else{
-			Toast.makeText(getApplicationContext(), "No tienes Internet", Toast.LENGTH_SHORT).show();
-		}
+	//	if(!Utils.isNetworkConnectionOk(Eventario_main.this)){
+		bean= null;
+		bean = Utils.llenarEventos(lat_+"",lon_+"",radio,horaInicio);
 		if(bean!=null){
 			cargarEventos();	
 		}else{
@@ -429,7 +427,7 @@ public class Eventario_main extends Activity {
 			if(Dialogos.customDialog!=null){
 				Dialogos.customDialog.dismiss();
 			}
-			if (!mLocationManager_eventos.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			if (!Utils.isNetworkConnectionOk(getApplicationContext())) {
 				new Dialogos().showDialogGPS(Eventario_main.this).show();		
 			}else{
 				if(pause){

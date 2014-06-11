@@ -8,7 +8,7 @@
     <!-- Mapa -->
     <string name="mapa_titulo_drawer">Eventos cerca de ti</string>
     <string name="mapa_inicio_de_viaje">Tu posición</string>
-    <string name="mapa_GPS_OFF">GPS apagado inseperado</string>
+    <string name="mapa_GPS_OFF">internet apagado inseperado</string>
     <string name="mapa_texto_significado_el_viaje_inicio">Espere, lo estamos localizando</string>
     <string name="mapa_buscar">Buscar</string>
     <string name="title_activity_configuracion_activity">Configuracion_activity</string>
@@ -25,7 +25,7 @@
 
     <!-- dialogo GPS -->
     <string name="dialogo_gps_titulo">Aviso</string>
-    <string name="dialogo_gps_texto">Evento requiere usar el GPS ¿Quieres encenderlo?</string>
+    <string name="dialogo_gps_texto">Eventario requiere usar internet ¿Quieres encenderla?</string>
     <string name="dialogo_gps_cancelar">Cancelar</string>
     <string name="dialogo_gps_aceptar">Aceptar</string>
     <string name="title_activity_mapa_llegar_evento">Mapa_llegar_evento</string>

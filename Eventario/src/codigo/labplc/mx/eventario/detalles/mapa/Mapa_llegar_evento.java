@@ -56,7 +56,6 @@ public class Mapa_llegar_evento extends FragmentActivity implements OnClickListe
 		setContentView(R.layout.fragment_mapa_llegar_evento);
 		
 		
-		
 		 final ActionBar ab = getActionBar();
 	     ab.setDisplayShowHomeEnabled(false);
 	     ab.setDisplayShowTitleEnabled(false);     
@@ -73,7 +72,7 @@ public class Mapa_llegar_evento extends FragmentActivity implements OnClickListe
 		if(bundle!=null){
 			 lat_ =bundle.getString("lat");
 			 lng_ =bundle.getString("lng");
-			 Toast.makeText(this, lat_+","+lng_+"", Toast.LENGTH_SHORT).show();
+		//	 Toast.makeText(this, lat_+","+lng_+"", Toast.LENGTH_SHORT).show();
 		}
 			
 		 followMeLocationSource = new FollowMeLocationSource();

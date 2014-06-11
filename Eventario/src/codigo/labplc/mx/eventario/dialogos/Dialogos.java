@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.provider.Settings;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -37,9 +38,7 @@ public class Dialogos {
             public void onClick(View view)
             {
             	Dialogos.customDialog.dismiss(); 
-            	Intent settingsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
- 				settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
- 				activity.startActivity(settingsIntent);
+            	activity.startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
             }
         });
 

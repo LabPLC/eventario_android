@@ -3,18 +3,21 @@ package codigo.labplc.mx.eventario.detalles;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
 import net.londatiga.android.twitter.Twitter;
 import net.londatiga.android.twitter.TwitterRequest;
 import net.londatiga.android.twitter.TwitterUser;
 import net.londatiga.android.twitter.oauth.OauthAccessToken;
-import net.londatiga.android.twitter.util.Debug;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +25,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 import codigo.labplc.mx.eventario.R;
@@ -37,8 +41,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import android.os.Bundle;
 
 
 public class Detalle_evento_Activity extends BaseActivity implements OnClickListener{
@@ -61,9 +63,11 @@ public class Detalle_evento_Activity extends BaseActivity implements OnClickList
 	private String url;
 	private Double mi_lat;
 	private Double mi_lon;
+
 	
 	private GoogleMap map;
 	private MarkerOptions marker;
+	private ShareActionProvider mShareActionProvider;
 	
 	
 	private Twitter mTwitter;
@@ -77,6 +81,8 @@ public class Detalle_evento_Activity extends BaseActivity implements OnClickList
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_detalle_evento);
+		
+
 		
 		//propiedades del action bar
 		 final ActionBar ab = getActionBar();
@@ -161,7 +167,7 @@ public class Detalle_evento_Activity extends BaseActivity implements OnClickList
 			public void onClick(View v) {
 		        mTwitter = new Twitter(Detalle_evento_Activity.this, CONSUMER_KEY, CONSUMER_SECRET, CALLBACK_URL);
 				if (mTwitter.sessionActive()) {
-					updateStatus("visitare "+url +" #Eventario " + " usa #traxi");
+					updateStatus("visitaré "+url +" #Eventario " + " usa #traxi");
 				} else {
 					signinTwitter();
 				}
@@ -173,6 +179,27 @@ public class Detalle_evento_Activity extends BaseActivity implements OnClickList
 			
 			@Override
 			public void onClick(View v) {
+				
+				Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+				   shareIntent.setType("text/plain");
+				   shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, (String) v.getTag(R.string.app_name));
+				   shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, url);
+
+				   PackageManager pm = v.getContext().getPackageManager();
+				   List<ResolveInfo> activityList = pm.queryIntentActivities(shareIntent, 0);
+				     for (final ResolveInfo app : activityList) 
+				     {
+				         if ((app.activityInfo.name).contains("facebook")) 
+				         {
+				           final ActivityInfo activity = app.activityInfo;
+				           final ComponentName name = new ComponentName(activity.applicationInfo.packageName, activity.name);
+				          shareIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+				          shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+				          shareIntent.setComponent(name);
+				          v.getContext().startActivity(shareIntent);
+				          break;
+				        }
+				      }
 				
 			}
 		});
@@ -412,5 +439,16 @@ public class Detalle_evento_Activity extends BaseActivity implements OnClickList
 				}
 			});
 		}
-	 
+		
+		 /** Returns a share intent */
+	    private Intent getDefaultShareIntent(){
+	        Intent intent = new Intent(Intent.ACTION_SEND);
+	        intent.setType("text/plain");
+	        intent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT");
+	        intent.putExtra(Intent.EXTRA_TEXT,"Extra Text");
+	        return intent;
+	    }
+		
+		
+		
 }

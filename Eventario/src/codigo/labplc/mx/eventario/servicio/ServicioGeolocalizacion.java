@@ -54,7 +54,7 @@ public class ServicioGeolocalizacion extends Service implements Runnable {
 		 //escucha para la location 
 		mLocationListener = new MyLocationListener();
 		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		Toast.makeText(taxiActivity, "Servicio creado ", Toast.LENGTH_SHORT).show();
+	//	Toast.makeText(taxiActivity, "Servicio creado ", Toast.LENGTH_SHORT).show();
 	}
 	
 	
@@ -63,7 +63,7 @@ public class ServicioGeolocalizacion extends Service implements Runnable {
 
 	@Override
 	public void onStart(Intent intent, int startId) {
-		Toast.makeText(taxiActivity, "Servicio creado ", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(taxiActivity, "Servicio creado ", Toast.LENGTH_SHORT).show();
 		if(isFirstTime){
 			obtenerSenalGPS();
 			isFirstTime=false;
@@ -78,7 +78,7 @@ public class ServicioGeolocalizacion extends Service implements Runnable {
 			if (mLocationListener != null)
 				mLocationManager.removeUpdates(mLocationListener);
 
-		Toast.makeText(this, "Servicio detenido ", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, "Servicio detenido ", Toast.LENGTH_SHORT).show();
 		super.onDestroy();
 	}
 	
@@ -111,7 +111,7 @@ public class ServicioGeolocalizacion extends Service implements Runnable {
 		if (currentLocation != null) {
 			latitud = Double.parseDouble(currentLocation.getLatitude() + "");
 			longitud = Double.parseDouble(currentLocation.getLongitude() + "");
-			Toast.makeText(this, "latitud "+latitud+" longitud "+longitud, Toast.LENGTH_SHORT).show();
+		//	Toast.makeText(this, "latitud "+latitud+" longitud "+longitud, Toast.LENGTH_SHORT).show();
 
 			if (isFirstLocation) {
 				latitud_inicial = latitud;
@@ -133,9 +133,9 @@ public class ServicioGeolocalizacion extends Service implements Runnable {
 	 * Hilo de la aplicacion para cargar las cordenadas del usuario
 	 */
 	public void run() {
-		if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+		if (mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 			Looper.prepare();
-			mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, intervaloLocation, 0, mLocationListener);
+			mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, intervaloLocation, 0, mLocationListener);
 			Looper.loop();
 			Looper.myLooper().quit();
 		} else {
@@ -185,8 +185,7 @@ public class ServicioGeolocalizacion extends Service implements Runnable {
 			taxiActivity.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					Toast.makeText(taxiActivity,
-							getResources().getString(R.string.mapa_GPS_OFF), Toast.LENGTH_LONG).show();
+					Toast.makeText(taxiActivity,getResources().getString(R.string.mapa_GPS_OFF), Toast.LENGTH_LONG).show();
 				}
 			});
 		}
