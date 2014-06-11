@@ -71,7 +71,6 @@ public class Mapa_llegar_evento extends FragmentActivity implements OnClickListe
 		if(bundle!=null){
 			 lat_ =bundle.getString("lat");
 			 lng_ =bundle.getString("lng");
-		//	 Toast.makeText(this, lat_+","+lng_+"", Toast.LENGTH_SHORT).show();
 		}
 			
 		 followMeLocationSource = new FollowMeLocationSource();
@@ -234,7 +233,7 @@ public class Mapa_llegar_evento extends FragmentActivity implements OnClickListe
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
             ArrayList<LatLng> points = null;
             PolylineOptions lineOptions = null;
-            
+            try{
             // Traversing through all the routes
             for(int i=0;i<result.size();i++){
                 points = new ArrayList<LatLng>();
@@ -261,7 +260,10 @@ public class Mapa_llegar_evento extends FragmentActivity implements OnClickListe
             }
             
             // Drawing polyline in the Google Map for the i-th route
-            map.addPolyline(lineOptions);                            
+            map.addPolyline(lineOptions); 
+            }catch(Exception e){
+            	
+            }
         }            
     }
 

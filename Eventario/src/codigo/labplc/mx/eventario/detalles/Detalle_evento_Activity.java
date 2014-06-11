@@ -207,15 +207,25 @@ public class Detalle_evento_Activity extends BaseActivity_twitter implements OnC
 		});
         
         ImageView detalle_evento_iv_dinero =(ImageView)findViewById(R.id.detalle_evento_iv_dinero);
+        if(precio.equals("No disponible")){
+        	detalle_evento_iv_dinero.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_dinero));
+        	detalle_evento_iv_dinero.setEnabled(false);
+		}
         detalle_evento_iv_dinero.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				new Dialogos().showDialogExtras(Detalle_evento_Activity.this, getResources().getString(R.string.detalle_presio), precio).show();
+				new Dialogos().showDialogExtras(Detalle_evento_Activity.this, getResources().getString(R.string.detalle_precio), precio).show();
 				
 			}
 		});
+        
+        
         ImageView detalle_evento_iv_info =(ImageView)findViewById(R.id.detalle_evento_iv_info);
+        if(descripcion.equals("No disponible")){
+        	detalle_evento_iv_info.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_info));
+        	detalle_evento_iv_info.setEnabled(false);
+		}
         detalle_evento_iv_info.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -223,7 +233,12 @@ public class Detalle_evento_Activity extends BaseActivity_twitter implements OnC
 				new Dialogos().showDialogExtras(Detalle_evento_Activity.this, getResources().getString(R.string.detalle_descripcion), descripcion).show();
 			}
 		});
+        
         ImageView detalle_evento_iv_tel =(ImageView)findViewById(R.id.detalle_evento_iv_tel);
+        if(contacto.equals("No disponible")){
+        	detalle_evento_iv_tel.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_tel));
+        	detalle_evento_iv_tel.setEnabled(false);
+		}
         detalle_evento_iv_tel.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -231,7 +246,12 @@ public class Detalle_evento_Activity extends BaseActivity_twitter implements OnC
 				new Dialogos().showDialogExtras(Detalle_evento_Activity.this, getResources().getString(R.string.detalle_telefono), contacto).show();
 						}
 		});
+        
         ImageView detalle_evento_iv_www =(ImageView)findViewById(R.id.detalle_evento_iv_www);
+        if(pagina.equals("No disponible")){
+        	detalle_evento_iv_www.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher_www));
+        	detalle_evento_iv_www.setEnabled(false);
+		}
         detalle_evento_iv_www.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -240,8 +260,6 @@ public class Detalle_evento_Activity extends BaseActivity_twitter implements OnC
 					Intent intent = new Intent(Detalle_evento_Activity.this, PaginaWebEvento.class);
 					intent.putExtra("pagina", pagina);
 					startActivity(intent);
-				}else{
-					new Dialogos().Toast(Detalle_evento_Activity.this,getResources().getString(R.string.no_pagina), Toast.LENGTH_LONG);
 				}
 			}
 		});

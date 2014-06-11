@@ -78,17 +78,20 @@ public class Eventario_main extends Activity {
 	public String lat_,lon_;
 	private  CustomList adapter;
 
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_eventario_main);
 		//
-		if (!Utils.isNetworkConnectionOk(this)) {
+		
+		if (!Utils.isNetworkConnectionOk(Eventario_main.this)) {
 			new Dialogos().showDialogGPS(Eventario_main.this).show();		
 		}else{
 			init();
 		}
+		
 			
 	}
 	
@@ -325,9 +328,7 @@ public class Eventario_main extends Activity {
 				nuevaTareas.execute(lat+"",lon+"");
 			}
 			
-			CameraPosition cameraPosition;
-			cameraPosition = new CameraPosition.Builder().target(new LatLng(lat, lon)).zoom(14).build();
-			map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));			
+					
 			
 			map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 				@Override
@@ -535,7 +536,7 @@ public class Eventario_main extends Activity {
 				
 				pDialog_hilo = new ProgressDialog(Eventario_main.this);
 				pDialog_hilo.setCanceledOnTouchOutside(false);
-				pDialog_hilo.setMessage("Actualizando");
+				pDialog_hilo.setMessage(getResources().getString(R.string.mapa_localizando));
 				pDialog_hilo.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 				pDialog_hilo.setCancelable(true);
 				pDialog_hilo.show();
@@ -567,6 +568,10 @@ public class Eventario_main extends Activity {
 				}
 			   	bean.setId_marker(id_markers);
 			   }
+			   CameraPosition cameraPosition;
+				cameraPosition = new CameraPosition.Builder().target(new LatLng(Double.parseDouble(lat_), Double.parseDouble(lon_))).zoom(14).build();
+				map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));	
+				
 			   eventario_main_btn_busca_aqui.setVisibility(Button.INVISIBLE);
 			   pDialog_hilo.dismiss();
 				 
@@ -577,5 +582,7 @@ public class Eventario_main extends Activity {
 				
 			
 		}
+		
 
+		
 }
