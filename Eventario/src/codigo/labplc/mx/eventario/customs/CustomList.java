@@ -10,6 +10,7 @@ import android.widget.TextView;
 import codigo.labplc.mx.eventario.R;
 
 /**
+ * clase que personaliza la lista de eventos
  * Created by mikesaurio on 05/05/14.
  */
 public class CustomList extends ArrayAdapter<String> {
@@ -20,6 +21,16 @@ public class CustomList extends ArrayAdapter<String> {
     private final String[] distancia;
     private final int[] imagen;
 
+
+    /**
+     * cosntructor
+     * @param context (Activity)
+     * @param nombre
+     * @param hora_inicio
+     * @param hora_fin
+     * @param distancia
+     * @param imagen
+     */
     public CustomList(Activity context,String[] nombre,String[] hora_inicio,String[] hora_fin,String[] distancia,int[] imagen) {
         super(context, R.layout.list_simple, nombre);
         this.context = context;
@@ -46,7 +57,7 @@ public class CustomList extends ArrayAdapter<String> {
         return rowView;
     }
     
-    
-    
+   
+	
    
 }

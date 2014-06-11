@@ -12,6 +12,11 @@ import codigo.labplc.mx.eventario.bean.InfoPointBean;
 
 import com.google.android.gms.maps.model.LatLng;
 
+/**
+ * 
+ * @author mikesaurio
+ *
+ */
 public class DirectionsJSONParser {
     
     /** Receives a JSONObject and returns a list of lists containing latitude and longitude */

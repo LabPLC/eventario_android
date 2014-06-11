@@ -15,7 +15,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -73,12 +72,11 @@ public class Eventario_main extends Activity {
 	private String id_ubicacion;
 	private String[] id_markers;
 	private boolean pause=false;
-	private long lastTouched = 0;
-	private static final long SCROLL_TIME = 200L;
 	private  EditText eventario_main_et_direccion ;
 	private  ArrayList<InfoPointBean> InfoPoint;
 	private  Button eventario_main_btn_busca_aqui;
 	public String lat_,lon_;
+	private  CustomList adapter;
 
 	
 	@Override
@@ -114,6 +112,15 @@ public class Eventario_main extends Activity {
 	     }
 	    	
 	     list=(ListView)findViewById(R.id.list);
+	     list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+	            @Override
+	            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+	       
+	            	abrirDetalles(bean.getId_marker()[position]);
+	            }
+	        });
+	     
+	     
 	     eventario_main_et_direccion = (EditText)findViewById(R.id.eventario_main_et_direccion);
 	     
 		final ImageView handle= (ImageView)findViewById(R.id.handle);
@@ -183,7 +190,6 @@ public class Eventario_main extends Activity {
 						
 						Uploaded nuevaTareas = new Uploaded();
 						nuevaTareas.execute(InfoPoint.get(0).getDblLatitude()+"", InfoPoint.get(0).getDblLongitude()+"");
-					//	cargarMapa(InfoPoint.get(0).getDblLatitude(), InfoPoint.get(0).getDblLongitude());
 					}
 				}
 				
@@ -198,7 +204,6 @@ public class Eventario_main extends Activity {
 			public void onClick(View v) {
 				Uploaded nuevaTareas = new Uploaded();
 				nuevaTareas.execute(map.getCameraPosition().target.latitude+"",map.getCameraPosition().target.longitude+"");
-				//cargarMapa(map.getCameraPosition().target.latitude,map.getCameraPosition().target.longitude);
 				
 			}
 		});
@@ -213,15 +218,9 @@ public class Eventario_main extends Activity {
 	 */
 	public boolean cargarEventos(){
 		try{
-			        CustomList adapter = new CustomList(Eventario_main.this, bean.getNombre(), bean.getHora_inicio(),bean.getHora_fin(),bean.getDistancia(),bean.getImagen());
-			        list.setAdapter(adapter);
-			        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			            @Override
-			            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-			       
-			            	abrirDetalles(bean.getId_marker()[position]);
-			            }
-			        });
+			 
+			 adapter = new CustomList(Eventario_main.this, bean.getNombre(), bean.getHora_inicio(),bean.getHora_fin(),bean.getDistancia(),bean.getImagen());
+			        
 			    
 			return true;
 		}catch(Exception e){
@@ -301,8 +300,8 @@ public class Eventario_main extends Activity {
 		marker.title(getResources().getString(R.string.mapa_inicio_de_viaje));
 		marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher_chinche_llena));
 		
-		CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(lat, lon)).zoom(14).build();
-		map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+	//	CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(lat, lon)).zoom(14).build();
+		//map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 		// adding marker
 		Marker m = map.addMarker(marker);	
 		id_ubicacion=m.getId();
@@ -486,12 +485,12 @@ public class Eventario_main extends Activity {
 		public boolean dispatchTouchEvent(MotionEvent ev) {
 			switch (ev.getAction()) {
 			case MotionEvent.ACTION_DOWN:
-				lastTouched = SystemClock.uptimeMillis();
+				//lastTouched = SystemClock.uptimeMillis();
 				break;
 			case MotionEvent.ACTION_UP:
-				final long now = SystemClock.uptimeMillis();
-				if ((now - lastTouched > SCROLL_TIME)&&
-						Utils.getDistanceMeters(lat, lon,map.getCameraPosition().target.latitude, map.getCameraPosition().target.longitude)>=1000) {
+				//final long now = SystemClock.uptimeMillis();
+				//if ((now - lastTouched > SCROLL_TIME)&&
+						if(Utils.getDistanceMeters(lat, lon,map.getCameraPosition().target.latitude, map.getCameraPosition().target.longitude)>=1000) {
 					eventario_main_btn_busca_aqui.setVisibility(Button.VISIBLE);
 				}else{
 					eventario_main_btn_busca_aqui.setVisibility(Button.INVISIBLE);
@@ -521,14 +520,10 @@ public class Eventario_main extends Activity {
 					Calendar c = Calendar.getInstance();
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 					String horaInicio = sdf.format(c.getTime());
-					
 					bean= null;
 					bean = Utils.llenarEventos(lat_+"",lon_+"",radio,horaInicio);
-					
 					if(bean!=null){
-						cargarEventos();	
-					}else{
-						Toast.makeText(getApplicationContext(), "No hay eventos cerca de ti", Toast.LENGTH_SHORT).show();
+						cargarEventos();
 					}
 				} catch (Exception e) {
 					e.getStackTrace();
@@ -550,14 +545,18 @@ public class Eventario_main extends Activity {
 
 			protected void onPostExecute(Void result) {
 				map.clear();
-				
+				if(bean!=null){
+				list.setAdapter(adapter);
+				}else{
+					new Dialogos().Toast(Eventario_main.this,getResources().getString(R.string.toast_no_eventos), Toast.LENGTH_SHORT);
+					list.setAdapter(null);
+				}
 				marker.position(new LatLng(Double.parseDouble(lat_),Double.parseDouble(lon_)));
 				Marker m=map.addMarker(marker);
 				id_ubicacion=m.getId();
 			   	
 			   if(bean!=null){
 				id_markers = new String[bean.getLatitud().length];
-
 				for(int i=0;i<bean.getLatitud().length;i++){
 					MarkerOptions markerte= new MarkerOptions();
 					markerte.position(new LatLng(Double.parseDouble(bean.getLatitud()[i]), Double.parseDouble(bean.getLongitud()[i])));
@@ -568,7 +567,7 @@ public class Eventario_main extends Activity {
 				}
 			   	bean.setId_marker(id_markers);
 			   }
-				
+			   eventario_main_btn_busca_aqui.setVisibility(Button.INVISIBLE);
 			   pDialog_hilo.dismiss();
 				 
 			   super.onPostExecute(result);	

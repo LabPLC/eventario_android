@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * 
+ * Bean para el mapa y traer la rutra
  * @author zaced
  *
  */

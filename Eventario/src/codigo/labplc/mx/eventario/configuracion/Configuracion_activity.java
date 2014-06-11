@@ -14,9 +14,14 @@ import codigo.labplc.mx.eventario.Eventario_main;
 import codigo.labplc.mx.eventario.R;
 import codigo.labplc.mx.eventario.dialogos.Dialogos;
 
+/**
+ * actividad que muestra las herramientas de eventario
+ * @author mikesaurio
+ *
+ */
 public class Configuracion_activity extends Activity implements OnSeekBarChangeListener{
 
-	String progreso = "2";
+	String progreso = "2"; //por defaul son 2 km de busqueda
 	TextView configuracion_tv_distancia;
 	
 	@Override
@@ -42,7 +47,7 @@ public class Configuracion_activity extends Activity implements OnSeekBarChangeL
 				@Override
 				public void onClick(View v) {
 
-					new Dialogos().showDialogExtras(Configuracion_activity.this, "Acerca de",getResources().getString(R.string.detalle_acerca_de)).show();
+					new Dialogos().showDialogExtras(Configuracion_activity.this, getResources().getString(R.string.configuracion_acercade),getResources().getString(R.string.detalle_acerca_de)).show();
 				}
 			});
 			
@@ -51,7 +56,7 @@ public class Configuracion_activity extends Activity implements OnSeekBarChangeL
 				
 				@Override
 				public void onClick(View v) {
-					new Dialogos().showDialogExtras(Configuracion_activity.this, "Terminos de uso", getResources().getString(R.string.detalle_terminos)).show();
+					new Dialogos().showDialogExtras(Configuracion_activity.this,getResources().getString(R.string.configuracion_terminos), getResources().getString(R.string.detalle_terminos)).show();
 					
 				}
 			});
@@ -109,7 +114,9 @@ public class Configuracion_activity extends Activity implements OnSeekBarChangeL
 	    
 	    
 
-	    
+	    /**
+	     * guarda las preferencias del usuario 
+	     */
 	   public void guardaPreferencia(){
 			//pone en blanco las preferencias
 			SharedPreferences prefs = getSharedPreferences("MisPreferenciasEventario", Context.MODE_PRIVATE);

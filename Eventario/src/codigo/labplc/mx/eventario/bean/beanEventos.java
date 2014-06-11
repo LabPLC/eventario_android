@@ -2,29 +2,30 @@ package codigo.labplc.mx.eventario.bean;
 
 
 /**
+ * Bean que guarda la info de los eventos
  * Created by mikesaurio on 22/05/14.
  */
 public class beanEventos {
 
-	String[] nombre;
-	String[] lugar;
-	String[] hora_inicio;
-	String[] hora_fin;
-	int[] imagen;
-	String[] descripcion;
-	String[] precio;
-	String[] direccion;
-	String[] fuente;
-	String[] fecha_inicio;
-	String[] fecha_fin;
-	String[] categoria;
-	String[] contacto;
-	String[] pagina;
-	String[] latitud;
-	String[] longitud;
-	String[] distancia;
-	String[] url;
-	String[] id_marker;
+	private String[] nombre;
+	private String[] lugar;
+	private String[] hora_inicio;
+	private String[] hora_fin;
+	private int[] imagen;
+	private String[] descripcion;
+	private String[] precio;
+	private String[] direccion;
+	private String[] fuente;
+	private String[] fecha_inicio;
+	private String[] fecha_fin;
+	private String[] categoria;
+	private String[] contacto;
+	private String[] pagina;
+	private String[] latitud;
+	private String[] longitud;
+	private String[] distancia;
+	private String[] url;
+	private String[] id_marker;
 
 	public String[] getId_marker() {
 		return id_marker;

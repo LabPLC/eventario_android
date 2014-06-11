@@ -15,6 +15,7 @@ import android.os.Message;
 import android.widget.Toast;
 import codigo.labplc.mx.eventario.Eventario_main;
 import codigo.labplc.mx.eventario.R;
+import codigo.labplc.mx.eventario.dialogos.Dialogos;
 
 /**
  * 
@@ -147,7 +148,8 @@ public class ServicioGeolocalizacion extends Service implements Runnable {
 			taxiActivity.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					Toast.makeText(taxiActivity,getResources().getString(R.string.mapa_GPS_OFF), Toast.LENGTH_LONG).show();
+					
+					new Dialogos().Toast(taxiActivity,getResources().getString(R.string.mapa_GPS_OFF), Toast.LENGTH_LONG);
 					
 				}
 			});
@@ -190,7 +192,7 @@ public class ServicioGeolocalizacion extends Service implements Runnable {
 			taxiActivity.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					Toast.makeText(taxiActivity,getResources().getString(R.string.mapa_GPS_OFF), Toast.LENGTH_LONG).show();
+					new Dialogos().Toast(taxiActivity,getResources().getString(R.string.mapa_GPS_OFF), Toast.LENGTH_LONG);
 				}
 			});
 		}

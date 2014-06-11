@@ -12,7 +12,11 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import codigo.labplc.mx.eventario.R;
-
+/**
+ * pagina web de los eventos
+ * @author mikesaurio
+ *
+ */
 public class PaginaWebEvento extends Activity implements OnClickListener {
 
 	private String pagina;

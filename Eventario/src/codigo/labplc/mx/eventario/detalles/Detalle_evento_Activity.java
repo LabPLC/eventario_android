@@ -211,7 +211,7 @@ public class Detalle_evento_Activity extends BaseActivity_twitter implements OnC
 			
 			@Override
 			public void onClick(View v) {
-				new Dialogos().showDialogExtras(Detalle_evento_Activity.this, "Presio", precio).show();
+				new Dialogos().showDialogExtras(Detalle_evento_Activity.this, getResources().getString(R.string.detalle_presio), precio).show();
 				
 			}
 		});
@@ -220,7 +220,7 @@ public class Detalle_evento_Activity extends BaseActivity_twitter implements OnC
 			
 			@Override
 			public void onClick(View v) {
-				new Dialogos().showDialogExtras(Detalle_evento_Activity.this, "Descripción", descripcion).show();
+				new Dialogos().showDialogExtras(Detalle_evento_Activity.this, getResources().getString(R.string.detalle_descripcion), descripcion).show();
 			}
 		});
         ImageView detalle_evento_iv_tel =(ImageView)findViewById(R.id.detalle_evento_iv_tel);
@@ -228,7 +228,7 @@ public class Detalle_evento_Activity extends BaseActivity_twitter implements OnC
 			
 			@Override
 			public void onClick(View v) {
-				new Dialogos().showDialogExtras(Detalle_evento_Activity.this, "Teléfono", contacto).show();
+				new Dialogos().showDialogExtras(Detalle_evento_Activity.this, getResources().getString(R.string.detalle_telefono), contacto).show();
 						}
 		});
         ImageView detalle_evento_iv_www =(ImageView)findViewById(R.id.detalle_evento_iv_www);
@@ -240,6 +240,8 @@ public class Detalle_evento_Activity extends BaseActivity_twitter implements OnC
 					Intent intent = new Intent(Detalle_evento_Activity.this, PaginaWebEvento.class);
 					intent.putExtra("pagina", pagina);
 					startActivity(intent);
+				}else{
+					new Dialogos().Toast(Detalle_evento_Activity.this,getResources().getString(R.string.no_pagina), Toast.LENGTH_LONG);
 				}
 			}
 		});

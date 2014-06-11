@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.widget.Toast;
 /**
  * clase base para datos de twitter
  * @author mikesaurio
@@ -58,9 +57,6 @@ public class BaseActivity_twitter extends Activity {
 		return mSharedPref.getString(USER_PIC, "");
 	}
 	
-	public void showToast(String text) {
-		Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
-	}
 	
 	public Activity getActivity() {
 		return this;

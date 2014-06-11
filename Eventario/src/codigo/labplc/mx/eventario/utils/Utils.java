@@ -24,7 +24,11 @@ import android.os.StrictMode;
 import codigo.labplc.mx.eventario.R;
 import codigo.labplc.mx.eventario.bean.InfoPointBean;
 import codigo.labplc.mx.eventario.bean.beanEventos;
-
+/**
+ * 
+ * @author mikesaurio
+ *
+ */
 public class Utils {
 	
 	
@@ -88,9 +92,8 @@ public class Utils {
 	public  static beanEventos llenarEventos(String lat,String lon,String radio,String fecha){
 			try{
 				  String Sjson=  doHttpConnection("http://eventario.mx/eventos.json?lat="+lat+"&lon="+lon+"&dist="+radio);
-		if(Sjson!=null){
 				  JSONArray jsonarray = new JSONArray(Sjson);
-				  	beanEventos bean = new    beanEventos();
+				  beanEventos bean = new    beanEventos();
 
 				  	String[] nombre = new String[jsonarray.length()];
 				  	String[] lugar = new String[jsonarray.length()];;
@@ -174,18 +177,18 @@ public class Utils {
 					bean.setLongitud(longitud);
 					bean.setUrl(url);
 					bean.setDistancia(distancia);
-					  return bean;
+					return bean;
 					
 				  }
 					return null;
 					
 			
-				}
+				
 				}catch(JSONException e){
 					e.getStackTrace();
 					return null;
 				}
-			return null;
+		
 		}
 	
 	
