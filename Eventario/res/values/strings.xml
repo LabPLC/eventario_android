@@ -27,8 +27,8 @@
 
     <!-- Detalle evento -->
     <string name="detalle_ab_titulo">Evento</string>
-    <string name="detalle_acerca_de">Evento</string>
-    <string name="detalle_terminos">Evento</string>
+    <string name="detalle_acerca_de">Eventario, permite  encontrar distintos tipos de eventos en la ciudad de México de una manera fácil y amigable, los eventos que esta aplicación presenta  son eventos que promueven la ciudad de México. Con esto dar siempre al usuario una opcción atractiva para asisitir a los eventos que la ciudad le ofrece.</string>
+    <string name="detalle_terminos">Esta aplicación es de código abierto, desarrollada durante el programa CódigoCDMX del LabPLC, puedes encontrar más información en www.eventario.mx</string>
     <string name="detalle_precio">Precio</string>
     <string name="no_pagina">No tiene página web</string>
     <string name="detalle_descripcion">Descripción</string>
