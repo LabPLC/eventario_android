@@ -15,4 +15,13 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" />
 
+    <ProgressBar
+        android:id="@+id/pB1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/pagina_evento_wb"
+       style="@style/CustomProgressBar"
+        android:layout_alignLeft="@+id/pagina_evento_wb"
+        android:padding="2dip" />
+
 </RelativeLayout>

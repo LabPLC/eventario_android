@@ -7,13 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import codigo.labplc.mx.eventario.R;
 
 public class PaginaWebEvento extends Activity implements OnClickListener {
 
 	private String pagina;
+	private ProgressBar Pbar;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +40,29 @@ public class PaginaWebEvento extends Activity implements OnClickListener {
 			 pagina =bundle.getString("pagina");
 		}
 
+		
+		Pbar = (ProgressBar) findViewById(R.id.pB1);
+		
+		
 		  WebView myWebView = (WebView) this.findViewById(R.id.pagina_evento_wb);
-	      myWebView.loadUrl(pagina);
+	   
+	      
+	      
+
+		  myWebView.setWebChromeClient(new WebChromeClient() {
+	            public void onProgressChanged(WebView view, int progress) 
+	               {
+	               if(progress < 100 && Pbar.getVisibility() == ProgressBar.GONE){
+	                   Pbar.setVisibility(ProgressBar.VISIBLE);
+	               }
+	               Pbar.setProgress(progress);
+	               if(progress == 100) {
+	                   Pbar.setVisibility(ProgressBar.GONE);
+	               }
+	            }
+	        });
+			
+			   myWebView.loadUrl(pagina);
 	}
 
 	@Override
