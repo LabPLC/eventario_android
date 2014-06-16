@@ -3,7 +3,6 @@ eventario_android
 
 Proyecto Eventario en Android para CODIGO.CDMX
 
-[![Build Status](https://travis-ci.org/LabPLC/DejateCaer.svg?branch=master)](https://travis-ci.org/LabPLC/DejateCaer)
 
 Aplicación en Android que encuentra eventos a tu alrededor.
 
@@ -82,13 +81,8 @@ Tambien puedes configurar el radio de búsqueda en la sección Opcciones
 #Comentarios
 
 Para dejar dudas, sugerencias o comentarios:
-* Twitter: [@yosoymikesaurio](www.twitter.com/yosoymikesaurio)
-* e-mail: mikesaurio@codigo.labplc.mx
+* Twitter: [@rockarlos](www.twitter.com/rockarlos) ; [@yosoymikesaurio](www.twitter.com/yosoymikesaurio)
+* e-mail: rockarlos@me.com ; mikesaurio@codigo.labplc.mx
 * Web-Site: [Eventario](www.eventario.mx)
 
-#Referencias
-
- * [Parse Tutorial push notifications](https://www.parse.com/tutorials/ios-push-notifications)
-
- * [Agregar parse a tu proyecto existente](https://www.parse.com/apps/quickstart#parse_push/ios/existing)
 
