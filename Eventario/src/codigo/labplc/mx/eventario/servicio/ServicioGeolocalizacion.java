@@ -82,8 +82,6 @@ public class ServicioGeolocalizacion extends Service implements Runnable {
 		if (mLocationManager != null)
 			if (mLocationListener != null)
 				mLocationManager.removeUpdates(mLocationListener);
-
-		//Toast.makeText(this, "Servicio detenido ", Toast.LENGTH_SHORT).show();
 		super.onDestroy();
 	}
 	

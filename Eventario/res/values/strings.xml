@@ -21,14 +21,19 @@
     <!-- Configuracion -->
     <string name="configuracion_terminos">Terminos de uso</string>
     <string name="configuracion_acercade">Acerca de</string>
+    <string name="configuracion_creditos">Créditos</string>
     <string name="configuracion_aceptar">Aceptar</string>
     <string name="configuracion_titulo_distancia">Distancia de búsqueda:</string>
     <string name="title_activity_detalle_evento_">Detalle_evento_Activity</string>
 
     <!-- Detalle evento -->
     <string name="detalle_ab_titulo">Evento</string>
-    <string name="detalle_acerca_de">Eventario, permite  encontrar distintos tipos de eventos en la ciudad de México de una manera fácil y amigable, los eventos que esta aplicación presenta  son eventos que promueven la ciudad de México. Con esto dar siempre al usuario una opcción atractiva para asisitir a los eventos que la ciudad le ofrece.</string>
+    <string name="detalle_acerca_de">Eventario es una aplicación móvil que determina tu localización y te sugiere los eventos que la ciudad promueve. Al seleccionar un evento, la aplicación te muestra una descripción con detalles como la fecha, hora, lugar y precio, además de que te indica cómo llegar. Para encontrar actividades también puedes ingresar una dirección específica o usar la navegación en el mapa. La información de los eventos que encuentres la puedes compartir en Facebook y en Twitter, para así ayudar a promover las actividades que te parezcan más interesantes.</string>
     <string name="detalle_terminos">Esta aplicación es de código abierto, desarrollada durante el programa CódigoCDMX del LabPLC, puedes encontrar más información en www.eventario.mx</string>
+   <string name="detalle_ab_creditos">Eventario fué derrollado por:\n\n
+       Carlos Castellanos - iOS Developer\n@rockarlos\n\n
+       Miguel Morán - Android Developer\n@yosoymikesaurio\n\n
+       Juan Carlos Sánchez - Ruby Developer\n@juancar1os\n\n En colaboración de Gabriela Olivera y Jóse Espinosa.</string>
     <string name="detalle_precio">Precio</string>
     <string name="no_pagina">No tiene página web</string>
     <string name="detalle_descripcion">Descripción</string>

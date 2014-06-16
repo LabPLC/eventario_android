@@ -538,7 +538,7 @@ public class Eventario_main extends Activity {
 				pDialog_hilo.setCanceledOnTouchOutside(false);
 				pDialog_hilo.setMessage(getResources().getString(R.string.mapa_localizando));
 				pDialog_hilo.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				pDialog_hilo.setCancelable(true);
+				pDialog_hilo.setCancelable(false);
 				pDialog_hilo.show();
 				super.onPreExecute();
 				

@@ -345,10 +345,6 @@ public class Mapa_llegar_evento extends FragmentActivity implements OnClickListe
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             
             
-          /*  MarkerOptions origen_marker = new MarkerOptions();
-            origen_marker.position(latLng);
-            origen_marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-            map.addMarker(origen_marker);*/
             
             MarkerOptions destino_marker = new MarkerOptions();
             destino_marker.position( new LatLng(Double.parseDouble(lat_), Double.parseDouble(lng_)));

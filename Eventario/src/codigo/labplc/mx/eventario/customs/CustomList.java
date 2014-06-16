@@ -47,7 +47,11 @@ public class CustomList extends ArrayAdapter<String> {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView= inflater.inflate(R.layout.list_simple, null, true);
         TextView txtTitle = (TextView) rowView.findViewById(R.id.row_tv_titulo);
-        txtTitle.setText(nombre[position]);
+        if(nombre[position].length()<=50){
+        	txtTitle.setText(nombre[position]);
+        }else{
+        	txtTitle.setText(nombre[position].substring(0, 47)+"...");
+        }
         TextView txtHorario = (TextView) rowView.findViewById(R.id.row_tv_horario);
         txtHorario.setText(hora_inicio[position]+" - "+hora_fin[position]);
         TextView txtDistancia = (TextView) rowView.findViewById(R.id.row_tv_tiempo);

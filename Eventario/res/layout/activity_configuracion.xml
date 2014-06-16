@@ -84,6 +84,25 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/configuracion_tv_terminosuso"
         android:background="@color/gris_obscuro" />
+    
+     <TextView
+        android:id="@+id/configuracion_tv_creditos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/View02"
+        android:layout_marginBottom="10dp"
+          android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/configuracion_creditos" />
+
+    <View
+        android:id="@+id/View03"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/configuracion_tv_creditos"
+        android:background="@color/gris_obscuro" />
 
     <Button
         android:id="@+id/configuracion_btn_aceptar"

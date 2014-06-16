@@ -76,6 +76,7 @@
         android:layout_toRightOf="@+id/imageView4"
         android:background="@color/gris_claro"
         android:gravity="center|left"
+        android:paddingRight="5dp"
         android:text="TextView" />
 
     <View

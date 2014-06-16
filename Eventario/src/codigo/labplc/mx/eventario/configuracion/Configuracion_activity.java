@@ -60,6 +60,17 @@ public class Configuracion_activity extends Activity implements OnSeekBarChangeL
 					
 				}
 			});
+			TextView  configuracion_tv_creditos =(TextView)findViewById(R.id.configuracion_tv_creditos);
+			configuracion_tv_creditos.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					new Dialogos().showDialogExtras(Configuracion_activity.this,getResources().getString(R.string.configuracion_creditos), getResources().getString(R.string.detalle_ab_creditos)).show();
+					
+				}
+			});	
+			
+			
 	    
 		 	configuracion_tv_distancia =(TextView) findViewById(R.id.configuracion_tv_distancia);
 			SeekBar    seekbar = (SeekBar)findViewById(R.id.configuracion_sb_distancia); // make seekbar object
