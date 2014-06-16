@@ -1,0 +1,94 @@
+eventario_android
+=================
+
+Proyecto Eventario en Android para CODIGO.CDMX
+
+[![Build Status](https://travis-ci.org/LabPLC/DejateCaer.svg?branch=master)](https://travis-ci.org/LabPLC/DejateCaer)
+
+Aplicación en Android que encuentra eventos a tu alrededor.
+
+Es una App que permite al usuario encontrar eventos en la ciudad de mexico de una manera facil y amigable, los eventos que esta app presenta al usuario son eventos que distintas secretarias del gobierno de la ciudad de México provee.
+
+Con esto se logra promover la cultura de la Ciudad de México , dando asi al usuario la opcción de encontrar la oferta diaria de eventos en la ciudad.
+
+#Construir 
+
+    google_play_services_lib
+    
+AYUDA PARA AGREGAR google_play_services_lib seleccionar New-> Project -> Android Application Project from Existing Code dar doble click en la ruta - "android-sdk\extras\google\google_play_services"
+
+#Datos 
+
+Los datos que la aplicacion presentan provienen de la Secretaria de Turismo y la Secretaria de Cultura de la Ciudad de México, para consultalos en su formato original sigue los siguiente enlaces:
+
+1. [Cultura](http://www.cultura.df.gob.mx/index.php/cartelera/eventos)
+2. [Turismo](http://www.mexicocity.gob.mx/calendario.php?cat=21100&sub=0&evento=2014-4-19)
+
+Para consultar los datos en formato json :
+
+1.  [CodigoCDMX](http://codigo.labplc.mx/~rockarloz/dejatecaer/dejatecaer.php?longitud=-99.13330667&latitud=19.42342714&radio=2000&fecha=2014-03-18)
+
+Para realizar una peticion al servidor de CodigoCDMX debes tomar encuenta que debes mandar los siguientes parametros:
+1. Latitud
+2. Longitud
+3. Radio de búsqueda.
+
+#Ejecutar Aplicación 
+
+Para ejecutar la aplicación desde el simulador debes emular la ubicacion del simulador en la ciudad de México y asi poder tener resultados.
+
+Para ejecutar la aplicación desde el Dispositivo debes usar tus provisionamientos de desarrollador, permitir de obtener la ubicación a la aplicación.
+El Dispotivo debe tener iOS7. 
+
+
+#¿Cómo Funciona?
+
+La aplicación inicia buscando eventos cerca del a ubicación del usuario a un radio predeterminado de 2Km.
+
+El usuario puede ralizar la búsqueda eventos alrededor del lugar que indique en la barra de búsqueda.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/LabPLC/DejateCaer/master/Capturas/mapa.png" alt="cerca" height="460" width="240"/>
+  <img src="https://raw.githubusercontent.com/LabPLC/DejateCaer/master/Capturas/buscar.png" alt="cerca" height="460" width="240"/>
+  </p>
+
+
+
+La aplicacíon presenta los eventos de 2 formas:
+
+
+
+Lista de lugares:
+
+En la lista de lugares los eventos de manera que se enseñen primero los eventos mas cercanos al punto de búsqueda.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/LabPLC/DejateCaer/master/Capturas/lista.png" alt="lista" height="460" width="240"/>
+  <img src="https://raw.githubusercontent.com/LabPLC/DejateCaer/master/Capturas/lista2.png" alt="lista2" height="460" width="240"/>
+  </p>
+
+
+Al seleccionar un eventos en cualquiera de las vistas, se mostrara los detalles de dicho evento, y tambien compartir dicha informacion en las redes sociales.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/LabPLC/DejateCaer/master/Capturas/detalles.png" alt="detalles" height="460" width="240"/>
+
+  </p>
+
+Tambien puedes configurar el radio de búsqueda en la sección Opcciones
+<p align="center">
+  <img src="https://raw.githubusercontent.com/LabPLC/DejateCaer/master/Capturas/opciones.png" alt="detalles" height="460" width="240"/>
+
+  </p>
+
+#Comentarios
+
+Para dejar dudas, sugerencias o comentarios:
+* Twitter: [@yosoymikesaurio](www.twitter.com/yosoymikesaurio)
+* e-mail: mikesaurio@codigo.labplc.mx
+* Web-Site: [Eventario](www.eventario.mx)
+
+#Referencias
+
+ * [Parse Tutorial push notifications](https://www.parse.com/tutorials/ios-push-notifications)
+
+ * [Agregar parse a tu proyecto existente](https://www.parse.com/apps/quickstart#parse_push/ios/existing)
+
