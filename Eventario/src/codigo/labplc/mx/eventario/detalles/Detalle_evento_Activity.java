@@ -169,7 +169,7 @@ public class Detalle_evento_Activity extends BaseActivity_twitter implements OnC
 			public void onClick(View v) {
 		        mTwitter = new Twitter(Detalle_evento_Activity.this, CONSUMER_KEY, CONSUMER_SECRET, CALLBACK_URL);
 				if (mTwitter.sessionActive()) {
-					updateStatus("visitaré "+url +" #Eventario " + " usa #traxi");
+					updateStatus("visitaré "+url +" @eventarioCDMX");
 				} else {
 					signinTwitter();
 				}

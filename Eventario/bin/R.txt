@@ -109,11 +109,12 @@ int drawable ic_plusone_standard_off_client 0x7f020044
 int drawable ic_plusone_tall_off_client 0x7f020045
 int drawable marco 0x7f020046
 int drawable marco_rojo 0x7f020047
-int drawable seek_bar_thumb 0x7f020048
-int drawable selector_btn_generic 0x7f020049
-int drawable selector_txt_boton_redondo 0x7f02004a
-int drawable shape_toast 0x7f02004b
-int drawable twitter_icon 0x7f02004c
+int drawable marcolateral 0x7f020048
+int drawable seek_bar_thumb 0x7f020049
+int drawable selector_btn_generic 0x7f02004a
+int drawable selector_txt_boton_redondo 0x7f02004b
+int drawable shape_toast 0x7f02004c
+int drawable twitter_icon 0x7f02004d
 int id View01 0x7f08000d
 int id View02 0x7f08000f
 int id View03 0x7f080011

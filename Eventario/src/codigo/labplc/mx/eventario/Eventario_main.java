@@ -15,6 +15,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -178,24 +179,7 @@ public class Eventario_main extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				String direccion_busqueda=   eventario_main_et_direccion.getText().toString(); 
-				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-	        	imm.hideSoftInputFromWindow(eventario_main_et_direccion.getWindowToken(), 0);
-	        	  
-				if(!direccion_busqueda.equals("")){
-					InfoPoint = null;
-					InfoPoint =Utils.busquedaDireccion(direccion_busqueda);
-					if(InfoPoint!=null){
-						
-						CameraPosition cameraPosition;
-						cameraPosition = new CameraPosition.Builder().target(new LatLng(InfoPoint.get(0).getDblLatitude(), InfoPoint.get(0).getDblLongitude())).zoom(map.getCameraPosition().zoom).build();
-						map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-						
-						Uploaded nuevaTareas = new Uploaded();
-						nuevaTareas.execute(InfoPoint.get(0).getDblLatitude()+"", InfoPoint.get(0).getDblLongitude()+"");
-					}
-				}
-				
+				direccionIngresada();
 			}
 		});
 		
@@ -214,7 +198,29 @@ public class Eventario_main extends Activity {
 		
 	}
 	
-	
+	/**
+	 * hace la busqueda de un lugar en especifico
+	 * 
+	 */
+	public void direccionIngresada() {
+		String direccion_busqueda=   eventario_main_et_direccion.getText().toString(); 
+		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+    	imm.hideSoftInputFromWindow(eventario_main_et_direccion.getWindowToken(), 0);
+    	
+		if(!direccion_busqueda.equals("")){
+			InfoPoint = null;
+			InfoPoint =Utils.busquedaDireccion(direccion_busqueda);
+			if(InfoPoint!=null){
+				CameraPosition cameraPosition;
+				cameraPosition = new CameraPosition.Builder().target(new LatLng(InfoPoint.get(0).getDblLatitude(), InfoPoint.get(0).getDblLongitude())).zoom(map.getCameraPosition().zoom).build();
+				map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+				Uploaded nuevaTareas = new Uploaded();
+				nuevaTareas.execute(InfoPoint.get(0).getDblLatitude()+"", InfoPoint.get(0).getDblLongitude()+"");
+			}
+		}
+		
+	}
+
 	/**
 	 * carga en la lista los eventos 
 	 * @return
@@ -328,8 +334,7 @@ public class Eventario_main extends Activity {
 				nuevaTareas.execute(lat+"",lon+"");
 			}
 			
-					
-			
+				
 			map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 				@Override
 				public void onInfoWindowClick(Marker marker) {
@@ -491,7 +496,7 @@ public class Eventario_main extends Activity {
 			case MotionEvent.ACTION_UP:
 				//final long now = SystemClock.uptimeMillis();
 				//if ((now - lastTouched > SCROLL_TIME)&&
-						if(Utils.getDistanceMeters(lat, lon,map.getCameraPosition().target.latitude, map.getCameraPosition().target.longitude)>=1000) {
+				if(Utils.getDistanceMeters(lat, lon,map.getCameraPosition().target.latitude, map.getCameraPosition().target.longitude)>=1000) {
 					eventario_main_btn_busca_aqui.setVisibility(Button.VISIBLE);
 				}else{
 					eventario_main_btn_busca_aqui.setVisibility(Button.INVISIBLE);
@@ -521,7 +526,7 @@ public class Eventario_main extends Activity {
 					Calendar c = Calendar.getInstance();
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 					String horaInicio = sdf.format(c.getTime());
-					bean= null;
+					
 					bean = Utils.llenarEventos(lat_+"",lon_+"",radio,horaInicio);
 					if(bean!=null){
 						cargarEventos();
@@ -540,6 +545,7 @@ public class Eventario_main extends Activity {
 				pDialog_hilo.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 				pDialog_hilo.setCancelable(false);
 				pDialog_hilo.show();
+				bean = null;
 				super.onPreExecute();
 				
 			}
@@ -547,11 +553,12 @@ public class Eventario_main extends Activity {
 			protected void onPostExecute(Void result) {
 				map.clear();
 				if(bean!=null){
-				list.setAdapter(adapter);
+					list.setAdapter(adapter);
 				}else{
 					new Dialogos().Toast(Eventario_main.this,getResources().getString(R.string.toast_no_eventos), Toast.LENGTH_SHORT);
 					list.setAdapter(null);
 				}
+				
 				marker.position(new LatLng(Double.parseDouble(lat_),Double.parseDouble(lon_)));
 				Marker m=map.addMarker(marker);
 				id_ubicacion=m.getId();
@@ -583,6 +590,12 @@ public class Eventario_main extends Activity {
 			
 		}
 		
-
+		@Override
+		public boolean dispatchKeyEvent(KeyEvent event) {
+			if(String.valueOf(event.getKeyCode()).equals("66")){
+					direccionIngresada();
+			}
+		    return super.dispatchKeyEvent(event);
+		}
 		
 }

@@ -12,11 +12,11 @@
     <string name="mapa_titulo_drawer">Eventos cerca de ti</string>
     <string name="mapa_inicio_de_viaje">Tu posición</string>
     <string name="mapa_GPS_OFF">internet apagado inseperado</string>
-    <string name="mapa_texto_significado_el_viaje_inicio">Espere, lo estamos localizando</string>
+    <string name="mapa_texto_significado_el_viaje_inicio">Espera, te estamos localizando</string>
     <string name="mapa_buscar">Buscar</string>
     <string name="title_activity_configuracion_activity">Configuracion_activity</string>
     <string name="mapa_titulo_boton_mas">Buscar en esta zona</string>
-    <string name="mapa_localizando">Actualizando, espere ....</string>
+    <string name="mapa_localizando">Actualizando, espera ....</string>
 
     <!-- Configuracion -->
     <string name="configuracion_terminos">Terminos de uso</string>
@@ -31,7 +31,7 @@
     <string name="detalle_acerca_de">Eventario es una aplicación móvil que determina tu localización y te sugiere los eventos que la ciudad promueve. Al seleccionar un evento, la aplicación te muestra una descripción con detalles como la fecha, hora, lugar y precio, además de que te indica cómo llegar. Para encontrar actividades también puedes ingresar una dirección específica o usar la navegación en el mapa. La información de los eventos que encuentres la puedes compartir en Facebook y en Twitter, para así ayudar a promover las actividades que te parezcan más interesantes.</string>
     <string name="detalle_terminos">Esta aplicación es de código abierto, desarrollada durante el programa CódigoCDMX del LabPLC, puedes encontrar más información en www.eventario.mx</string>
    <string name="detalle_ab_creditos">Eventario fué derrollado por:\n\n
-       Carlos Castellanos - iOS Developer\n@rockarlos\n\n
+       Carlos Castellanos - iOS Developer\n@rockarloz\n\n
        Miguel Morán - Android Developer\n@yosoymikesaurio\n\n
        Juan Carlos Sánchez - Ruby Developer\n@juancar1os\n\n En colaboración de Gabriela Olivera y Jóse Espinosa.</string>
     <string name="detalle_precio">Precio</string>
@@ -41,7 +41,7 @@
 
     <!-- dialogo GPS -->
     <string name="dialogo_gps_titulo">Aviso</string>
-    <string name="dialogo_gps_texto">Eventario requiere usar internet ¿Quieres encenderla?</string>
+    <string name="dialogo_gps_texto">Eventario requiere usar internet ¿Quiéres encenderla?</string>
     <string name="dialogo_gps_cancelar">Cancelar</string>
     <string name="dialogo_gps_aceptar">Aceptar</string>
     <string name="title_activity_mapa_llegar_evento">Mapa_llegar_evento</string>

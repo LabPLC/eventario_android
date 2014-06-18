@@ -49,13 +49,13 @@
 
     <TextView
         android:id="@+id/configuracion_tv_acercade"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/view1"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:text="@string/configuracion_acercade" />
 
     <View
@@ -68,12 +68,12 @@
 
     <TextView
         android:id="@+id/configuracion_tv_terminosuso"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/View01"
         android:layout_marginBottom="10dp"
-          android:layout_marginLeft="10dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:text="@string/configuracion_terminos" />
 
@@ -86,15 +86,15 @@
         android:background="@color/gris_obscuro" />
     
      <TextView
-        android:id="@+id/configuracion_tv_creditos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/View02"
-        android:layout_marginBottom="10dp"
-          android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/configuracion_creditos" />
+         android:id="@+id/configuracion_tv_creditos"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_alignParentLeft="true"
+         android:layout_below="@+id/View02"
+         android:layout_marginBottom="10dp"
+         android:layout_marginLeft="10dp"
+         android:layout_marginTop="10dp"
+         android:text="@string/configuracion_creditos" />
 
     <View
         android:id="@+id/View03"
