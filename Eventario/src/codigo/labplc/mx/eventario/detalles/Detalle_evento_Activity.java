@@ -1,32 +1,15 @@
 package codigo.labplc.mx.eventario.detalles;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.londatiga.android.twitter.Twitter;
-import net.londatiga.android.twitter.TwitterRequest;
-import net.londatiga.android.twitter.TwitterUser;
-import net.londatiga.android.twitter.oauth.OauthAccessToken;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
 import android.app.ActionBar;
-import android.app.ProgressDialog;
-import android.content.ComponentName;
+import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import codigo.labplc.mx.eventario.R;
 import codigo.labplc.mx.eventario.detalles.mapa.Mapa_llegar_evento;
 import codigo.labplc.mx.eventario.dialogos.Dialogos;
@@ -46,7 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * @author mikesaurio
  *
  */
-public class Detalle_evento_Activity extends BaseActivity_twitter implements OnClickListener{
+public class Detalle_evento_Activity extends Activity implements OnClickListener{
 
 	private String nombre;
 	private String lugar;
@@ -72,7 +55,6 @@ public class Detalle_evento_Activity extends BaseActivity_twitter implements OnC
 	private MarkerOptions marker;
 	
 	
-	private Twitter mTwitter;
 	
 	public static final String CONSUMER_KEY = "D4ABzYy7ZWF38WxNRQMrprbnn";
 	public static final String CONSUMER_SECRET = "jZoHRWIqi91kBqWlt6plc5em2TmccdqnH0kWNakiFynU2uvi03";
@@ -162,49 +144,22 @@ public class Detalle_evento_Activity extends BaseActivity_twitter implements OnC
         
         
         
-        ImageView detalle_evento_iv_tw =(ImageView)findViewById(R.id.detalle_evento_iv_tw);
-        detalle_evento_iv_tw.setOnClickListener(new View.OnClickListener() {
+        ImageView detalle_evento_iv_compartir =(ImageView)findViewById(R.id.detalle_evento_iv_compartir);
+        detalle_evento_iv_compartir.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-		        mTwitter = new Twitter(Detalle_evento_Activity.this, CONSUMER_KEY, CONSUMER_SECRET, CALLBACK_URL);
-				if (mTwitter.sessionActive()) {
-					updateStatus("visitaré "+url +" @eventarioCDMX");
-				} else {
-					signinTwitter();
-				}
+				Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+				sharingIntent.setType("text/plain");
+				String shareBody = "visitaré "+url +" @eventarioCDMX #eventario";
+				sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Eventario");
+				sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+				startActivity(Intent.createChooser(sharingIntent, "Share via"));
+				
 			}
 		});
         
-        ImageView detalle_evento_iv_fb =(ImageView)findViewById(R.id.detalle_evento_iv_fb);
-        detalle_evento_iv_fb.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
-				   shareIntent.setType("text/plain");
-				   shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, (String) v.getTag(R.string.app_name));
-				   shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, url);
-
-				   PackageManager pm = v.getContext().getPackageManager();
-				   List<ResolveInfo> activityList = pm.queryIntentActivities(shareIntent, 0);
-				     for (final ResolveInfo app : activityList) 
-				     {
-				         if ((app.activityInfo.name).contains("facebook")) 
-				         {
-				           final ActivityInfo activity = app.activityInfo;
-				           final ComponentName name = new ComponentName(activity.applicationInfo.packageName, activity.name);
-				          shareIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-				          shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-				          shareIntent.setComponent(name);
-				          v.getContext().startActivity(shareIntent);
-				          break;
-				        }
-				      }
-				
-			}
-		});
+     
         
         ImageView detalle_evento_iv_dinero =(ImageView)findViewById(R.id.detalle_evento_iv_dinero);
         if(precio.equals("No disponible")){
@@ -380,89 +335,12 @@ public class Detalle_evento_Activity extends BaseActivity_twitter implements OnC
 	
 	 @Override
 	public void onBackPressed() {
+		
 		 atras();
 	}
 	 
 	 
 	 
-	 //Twitter
-	 private void signinTwitter() {
-			mTwitter.signin(new Twitter.SigninListener() {				
-				@Override
-				public void onSuccess(OauthAccessToken accessToken, String userId, String screenName) {
-					getCredentials();
-				}
-				
-				@Override
-				public void onError(String error) {
-				Log.d("*******", error);
-				}
-			});
-		}
-		
-		private void getCredentials() {
-			final ProgressDialog progressDlg = new ProgressDialog(this);
-			
-			progressDlg.setMessage("Getting credentials...");
-			progressDlg.setCancelable(false);
-			
-			progressDlg.show();
-			
-			TwitterRequest request = new TwitterRequest(mTwitter.getConsumer(), mTwitter.getAccessToken());
-			
-			request.verifyCredentials(new TwitterRequest.VerifyCredentialListener() {
-				
-				@Override
-				public void onSuccess(TwitterUser user) {
-					progressDlg.dismiss();
-					
-					Toast.makeText(getApplicationContext(),"Hola " + user.name,Toast.LENGTH_LONG).show();
-					
-					saveCredential(user.screenName, user.name, user.profileImageUrl);
-				}
-				
-				@Override
-				public void onError(String error) {
-					progressDlg.dismiss();
-					Log.d("*******", error);
-				}
-			});
-		}
-		
-		
-		private void updateStatus(String status) {
-			final ProgressDialog progressDlg = new ProgressDialog(this);
-			
-			progressDlg.setMessage("Enviando...");
-			progressDlg.setCancelable(false);
-			
-			progressDlg.show();
-			
-			TwitterRequest request 		= new TwitterRequest(mTwitter.getConsumer(), mTwitter.getAccessToken());
-			
-			String updateStatusUrl		= "https://api.twitter.com/1.1/statuses/update.json";
-			
-			List<NameValuePair> params 	= new ArrayList<NameValuePair>(1);
-			
-			params.add(new BasicNameValuePair("status", status));
-			
-			request.createRequest("POST", updateStatusUrl, params, new TwitterRequest.RequestListener() {
-				
-				@Override
-				public void onSuccess(String response) {
-					progressDlg.dismiss();
-					Toast.makeText(getApplicationContext(), "tuit enviado",Toast.LENGTH_LONG).show();
-				}
-				
-				@Override
-				public void onError(String error) {
-					Log.d("*******", error);
-					progressDlg.dismiss();
-				}
-			});
-		}
-		
-				
 		
 		
 }

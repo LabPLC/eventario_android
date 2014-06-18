@@ -78,6 +78,7 @@ public class Eventario_main extends Activity {
 	private  Button eventario_main_btn_busca_aqui;
 	public String lat_,lon_;
 	private  CustomList adapter;
+	private SlidingDrawer drawer;
 
 
 	
@@ -128,7 +129,7 @@ public class Eventario_main extends Activity {
 	     eventario_main_et_direccion = (EditText)findViewById(R.id.eventario_main_et_direccion);
 	     
 		final ImageView handle= (ImageView)findViewById(R.id.handle);
-		SlidingDrawer drawer = (SlidingDrawer)findViewById(R.id.drawer);
+		 drawer = (SlidingDrawer)findViewById(R.id.drawer);
 		drawer.setOnDrawerOpenListener(new OnDrawerOpenListener() {
 			
 			@Override
@@ -488,6 +489,8 @@ public class Eventario_main extends Activity {
 			if(Dialogos.customDialog!=null){
 				Dialogos.customDialog.dismiss();
 				finish();
+			}else if(drawer.isOpened()){
+				drawer.close();
 			}else{
 				super.onBackPressed();	
 			}
@@ -595,6 +598,9 @@ public class Eventario_main extends Activity {
 				
 			
 		}
+		
+		
+		   
 		
 		@Override
 		public boolean dispatchKeyEvent(KeyEvent event) {
