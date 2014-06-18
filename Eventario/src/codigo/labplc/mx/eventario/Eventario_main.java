@@ -211,11 +211,17 @@ public class Eventario_main extends Activity {
 			InfoPoint = null;
 			InfoPoint =Utils.busquedaDireccion(direccion_busqueda);
 			if(InfoPoint!=null){
+				try{
 				CameraPosition cameraPosition;
 				cameraPosition = new CameraPosition.Builder().target(new LatLng(InfoPoint.get(0).getDblLatitude(), InfoPoint.get(0).getDblLongitude())).zoom(map.getCameraPosition().zoom).build();
 				map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 				Uploaded nuevaTareas = new Uploaded();
 				nuevaTareas.execute(InfoPoint.get(0).getDblLatitude()+"", InfoPoint.get(0).getDblLongitude()+"");
+				}catch(Exception e){
+					eventario_main_et_direccion.setText("");
+					InfoPoint = null;
+					new Dialogos().Toast(Eventario_main.this, getResources().getString(R.string.mapa_no_encontrado), Toast.LENGTH_SHORT);
+				}
 			}
 		}
 		
