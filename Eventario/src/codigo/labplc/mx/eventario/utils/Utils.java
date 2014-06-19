@@ -123,7 +123,7 @@ public class Utils {
 							categoria[i]=((String) oneObject.getString("categoria"));
 							if(categoria[i].equals("Aprendizaje")){
 								imagen[i]=(R.drawable.ic_launcher_aprendizaje);
-							}else if(categoria[i].equals("Tecnologia")){
+							}else if(categoria[i].equals("Tecnolog’a")){
 								imagen[i]=(R.drawable.ic_launcher_tecnologia);
 							}else if(categoria[i].equals("Teatro")){
 								imagen[i]=(R.drawable.ic_launcher_teatro);

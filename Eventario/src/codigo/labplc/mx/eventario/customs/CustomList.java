@@ -50,7 +50,7 @@ public class CustomList extends ArrayAdapter<String> {
         if(nombre[position].length()<=50){
         	txtTitle.setText(nombre[position]);
         }else{
-        	txtTitle.setText(nombre[position].substring(0, 47)+"...");
+        	txtTitle.setText(nombre[position].substring(0, 41)+"...");
         }
         TextView txtHorario = (TextView) rowView.findViewById(R.id.row_tv_horario);
         txtHorario.setText(hora_inicio[position]+" - "+hora_fin[position]);
