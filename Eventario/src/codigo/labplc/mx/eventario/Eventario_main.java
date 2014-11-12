@@ -29,6 +29,7 @@ import android.widget.SlidingDrawer.OnDrawerCloseListener;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import codigo.labplc.mx.eventario.Eventario.TrackerName;
 import codigo.labplc.mx.eventario.bean.InfoPointBean;
 import codigo.labplc.mx.eventario.bean.beanEventos;
 import codigo.labplc.mx.eventario.configuracion.Configuracion_activity;
@@ -38,6 +39,8 @@ import codigo.labplc.mx.eventario.dialogos.Dialogos;
 import codigo.labplc.mx.eventario.servicio.ServicioGeolocalizacion;
 import codigo.labplc.mx.eventario.utils.Utils;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
@@ -48,7 +51,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 
 /**
  * clase principal 
@@ -599,15 +601,27 @@ public class Eventario_main extends Activity {
 			
 		}
 		
-		
-		   
-		
 		@Override
 		public boolean dispatchKeyEvent(KeyEvent event) {
 			if(String.valueOf(event.getKeyCode()).equals("66")){
 					direccionIngresada();
 			}
 		    return super.dispatchKeyEvent(event);
+		}
+		
+		@Override
+		public void onStart() {
+		  super.onStart();
+		  // Get tracker.
+	        Tracker t = ((Eventario) getApplication()).getTracker(
+	            TrackerName.APP_TRACKER);
+
+	        // Set screen name.
+	        // Where path is a String representing the screen name.
+	        t.setScreenName("Main");
+
+	        // Send a screen view.
+	        t.send(new HitBuilders.AppViewBuilder().build());
 		}
 		
 }

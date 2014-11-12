@@ -1,8 +1,11 @@
-package codigo.labplc.mx.eventario;
+package codigo.labplc.mx.eventario.splash;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+import codigo.labplc.mx.eventario.Eventario_main;
+import codigo.labplc.mx.eventario.R;
+import codigo.labplc.mx.eventario.R.layout;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

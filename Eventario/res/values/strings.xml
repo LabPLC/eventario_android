@@ -48,5 +48,8 @@
     <string name="title_activity_mapa_llegar_evento">Mapa_llegar_evento</string>
     <string name="title_activity_pagina_web_evento">PaginaWebEvento</string>
     <string name="title_activity_splash">SplashActivity</string>
+    
+    
+    
 
 </resources>
